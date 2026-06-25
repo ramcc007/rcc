@@ -4,6 +4,7 @@ import { db } from '@/lib/db'
 import { campaigns, scripts } from '@/lib/db/schema'
 import { eq, and } from 'drizzle-orm'
 import { generateScript } from '@/lib/gemini/script-generator'
+import { checkScriptRateLimit } from '@/lib/rate-limit'
 import { v4 as uuidv4 } from 'uuid'
 import { z } from 'zod'
 
@@ -28,6 +29,13 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       { error: 'Gemini API key not configured. Please add your API key in Settings.' },
       { status: 422 }
+    )
+  }
+
+  if (!checkScriptRateLimit(ctx.userId)) {
+    return NextResponse.json(
+      { error: 'Rate limit exceeded. Maximum 20 script generations per hour.' },
+      { status: 429 }
     )
   }
 

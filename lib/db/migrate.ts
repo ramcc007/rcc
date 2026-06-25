@@ -3,7 +3,7 @@ import path from 'path'
 
 const DB_PATH = process.env.DATABASE_URL?.replace('file:', '') ?? './dev.db'
 
-const CREATE_TABLES = `
+export const CREATE_TABLES = `
 CREATE TABLE IF NOT EXISTS users (
   id TEXT PRIMARY KEY,
   email TEXT NOT NULL UNIQUE,

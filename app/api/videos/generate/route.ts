@@ -5,6 +5,7 @@ import { scripts, campaigns, videoJobs } from '@/lib/db/schema'
 import { eq, and } from 'drizzle-orm'
 import { initiateVideoGeneration } from '@/lib/veo/client'
 import { buildVeoPromptFromScript } from '@/lib/gemini/prompts'
+import { checkVideoRateLimit } from '@/lib/rate-limit'
 import { v4 as uuidv4 } from 'uuid'
 import { z } from 'zod'
 import type { ScriptContent } from '@/lib/types'
@@ -33,6 +34,13 @@ export async function POST(request: NextRequest) {
     return NextResponse.json(
       { error: 'Gemini API key not configured. Please add your API key in Settings.' },
       { status: 422 }
+    )
+  }
+
+  if (!checkVideoRateLimit(ctx.userId)) {
+    return NextResponse.json(
+      { error: 'Rate limit exceeded. Maximum 10 video generations per hour.' },
+      { status: 429 }
     )
   }
 
