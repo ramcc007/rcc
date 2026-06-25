@@ -1,7 +1,4 @@
-import Database from 'better-sqlite3'
-import path from 'path'
-
-const DB_PATH = process.env.DATABASE_URL?.replace('file:', '') ?? './dev.db'
+import { createClient } from '@libsql/client'
 
 export const CREATE_TABLES = `
 CREATE TABLE IF NOT EXISTS users (
@@ -136,15 +133,19 @@ CREATE TABLE IF NOT EXISTS video_exports (
 );
 `
 
-export function runMigrations() {
-  const sqlite = new Database(path.resolve(process.cwd(), DB_PATH))
-  sqlite.pragma('journal_mode = WAL')
-  sqlite.pragma('foreign_keys = ON')
-  sqlite.exec(CREATE_TABLES)
-  sqlite.close()
+export async function runMigrations() {
+  const client = createClient({
+    url: process.env.TURSO_DATABASE_URL ?? 'file:./dev.db',
+    authToken: process.env.TURSO_AUTH_TOKEN,
+  })
+  const statements = CREATE_TABLES.split(';').map(s => s.trim()).filter(Boolean)
+  for (const sql of statements) {
+    await client.execute(sql)
+  }
+  client.close()
   console.log('Database migrations completed')
 }
 
 if (require.main === module) {
-  runMigrations()
+  runMigrations().catch(console.error)
 }
