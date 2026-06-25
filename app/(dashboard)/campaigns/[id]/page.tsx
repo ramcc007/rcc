@@ -60,7 +60,7 @@ export default async function CampaignDetailPage({ params }: { params: Promise<{
       {/* Brief */}
       <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-5 mb-6">
         <h2 className="text-sm font-semibold text-white mb-3">Campaign Brief</h2>
-        <div className="grid grid-cols-2 gap-4 text-sm">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
           <div><span className="text-[#555]">Target Audience:</span> <span className="text-[#a3a3a3] ml-1">{campaign.targetAudience}</span></div>
           {campaign.brandVoice && <div><span className="text-[#555]">Brand Voice:</span> <span className="text-[#a3a3a3] ml-1">{campaign.brandVoice}</span></div>}
           <div><span className="text-[#555]">Created:</span> <span className="text-[#a3a3a3] ml-1">{formatDate(campaign.createdAt)}</span></div>

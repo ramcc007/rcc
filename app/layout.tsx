@@ -16,6 +16,14 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: 'UGC Pro Studio — AI-Powered UGC Video Creator',
   description: 'Create professional UGC videos with AI script generation, character creation, compliance checks, and Veo 3 video generation.',
+  robots: {
+    index: false,
+    follow: false,
+    googleBot: {
+      index: false,
+      follow: false,
+    },
+  },
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

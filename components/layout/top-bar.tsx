@@ -1,24 +1,35 @@
 'use client'
 import { useSession, signOut } from 'next-auth/react'
 import Link from 'next/link'
-import { PlusCircle, ChevronDown, LogOut, Settings, User } from 'lucide-react'
+import { PlusCircle, ChevronDown, LogOut, Settings, User, Menu } from 'lucide-react'
 import { useState } from 'react'
 
-export function TopBar() {
+interface TopBarProps {
+  onMenuClick?: () => void
+}
+
+export function TopBar({ onMenuClick }: TopBarProps) {
   const { data: session } = useSession()
   const [menuOpen, setMenuOpen] = useState(false)
 
   return (
-    <header className="h-14 bg-[#141414] border-b border-[#2a2a2a] flex items-center justify-between px-6 flex-shrink-0">
-      <div />
+    <header className="h-14 bg-[#141414] border-b border-[#2a2a2a] flex items-center justify-between px-4 lg:px-6 flex-shrink-0">
+      <button
+        onClick={onMenuClick}
+        className="lg:hidden p-2 rounded-lg text-[#a3a3a3] hover:text-white hover:bg-[#262626] transition-colors"
+        aria-label="Open menu"
+      >
+        <Menu className="w-5 h-5" />
+      </button>
+      <div className="hidden lg:block" />
 
       <div className="flex items-center gap-3">
         <Link
           href="/create"
-          className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white text-sm font-medium px-4 py-2 rounded-lg transition-colors"
+          className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white text-sm font-medium px-3 sm:px-4 py-2 rounded-lg transition-colors"
         >
           <PlusCircle className="w-4 h-4" />
-          New Video
+          <span className="hidden sm:inline">New Video</span>
         </Link>
 
         {/* User menu */}

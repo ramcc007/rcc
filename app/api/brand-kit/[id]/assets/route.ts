@@ -27,17 +27,25 @@ export async function POST(
 
   if (!file) return NextResponse.json({ error: 'No file provided' }, { status: 400 })
 
-  const allowedTypes = ['image/jpeg', 'image/png', 'image/webp', 'image/gif']
-  if (!allowedTypes.includes(file.type)) {
+  const ALLOWED_MIME_TO_EXT: Record<string, string> = {
+    'image/jpeg': 'jpg',
+    'image/png': 'png',
+    'image/webp': 'webp',
+    'image/gif': 'gif',
+  }
+  const ext = ALLOWED_MIME_TO_EXT[file.type]
+  if (!ext) {
     return NextResponse.json({ error: 'Invalid file type. Use JPEG, PNG, WebP or GIF.' }, { status: 400 })
   }
 
-  const maxSize = 10 * 1024 * 1024 // 10MB
+  const ALLOWED_ASSET_TYPES = ['product_image', 'logo', 'watermark']
+  const assetType = ALLOWED_ASSET_TYPES.includes(type) ? type : 'product_image'
+
+  const maxSize = 10 * 1024 * 1024
   if (file.size > maxSize) {
     return NextResponse.json({ error: 'File too large. Maximum 10MB.' }, { status: 400 })
   }
 
-  const ext = file.name.split('.').pop() ?? 'jpg'
   const filename = `${ctx.userId}-${uuidv4()}.${ext}`
   const buffer = Buffer.from(await file.arrayBuffer())
   const url = await saveUploadedFile(buffer, filename, 'brand')
@@ -48,7 +56,7 @@ export async function POST(
     brandKitId: id,
     name: file.name,
     url,
-    type,
+    type: assetType,
     mimeType: file.type,
     sizeBytes: file.size,
   })
