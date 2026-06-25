@@ -122,6 +122,12 @@ export const videoJobs = sqliteTable('video_jobs', {
   updatedAt: integer('updated_at', { mode: 'timestamp' }).default(sql`(unixepoch())`),
 })
 
+export const rateLimitLog = sqliteTable('rate_limit_log', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  key: text('key').notNull(),
+  ts: integer('ts').notNull(),
+})
+
 export const videoExports = sqliteTable('video_exports', {
   id: text('id').primaryKey(),
   videoJobId: text('video_job_id').notNull().references(() => videoJobs.id, { onDelete: 'cascade' }),

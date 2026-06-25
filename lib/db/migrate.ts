@@ -134,6 +134,14 @@ CREATE TABLE IF NOT EXISTS video_exports (
   exported_url TEXT NOT NULL,
   created_at INTEGER DEFAULT (unixepoch())
 );
+
+CREATE TABLE IF NOT EXISTS rate_limit_log (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  key TEXT NOT NULL,
+  ts INTEGER NOT NULL
+);
+
+CREATE INDEX IF NOT EXISTS idx_rate_limit_key_ts ON rate_limit_log (key, ts);
 `
 
 // Incremental column additions — safe to re-run; errors are ignored

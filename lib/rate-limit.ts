@@ -1,33 +1,37 @@
-interface Window {
-  timestamps: number[]
-}
+import { db } from '@/lib/db'
+import { rateLimitLog } from '@/lib/db/schema'
+import { and, eq, gt, lt, count } from 'drizzle-orm'
 
-const store = new Map<string, Window>()
+export async function rateLimit(key: string, limit: number, windowSecs: number): Promise<boolean> {
+  const now = Math.floor(Date.now() / 1000)
+  const windowStart = now - windowSecs
 
-export function rateLimit(key: string, limit: number, windowMs: number): boolean {
-  const now = Date.now()
-  const cutoff = now - windowMs
+  try {
+    const [row] = await db
+      .select({ cnt: count() })
+      .from(rateLimitLog)
+      .where(and(eq(rateLimitLog.key, key), gt(rateLimitLog.ts, windowStart)))
 
-  let window = store.get(key)
-  if (!window) {
-    window = { timestamps: [] }
-    store.set(key, window)
+    if (Number(row.cnt) >= limit) return false
+
+    await db.insert(rateLimitLog).values({ key, ts: now })
+
+    // 10% chance: clean up stale records older than 2× the window
+    if (Math.random() < 0.1) {
+      await db.delete(rateLimitLog).where(lt(rateLimitLog.ts, windowStart - windowSecs))
+    }
+
+    return true
+  } catch {
+    // Fail open on DB error — prefer availability over lockout
+    return true
   }
-
-  // Evict timestamps outside the window
-  window.timestamps = window.timestamps.filter(t => t > cutoff)
-
-  if (window.timestamps.length >= limit) return false
-
-  window.timestamps.push(now)
-  return true
 }
 
-// Convenience wrappers for the two rate-limited endpoints
-export function checkScriptRateLimit(userId: string) {
-  return rateLimit(`script:${userId}`, 20, 60 * 60 * 1000) // 20 per hour
+export async function checkScriptRateLimit(userId: string): Promise<boolean> {
+  return rateLimit(`script:${userId}`, 20, 3600)
 }
 
-export function checkVideoRateLimit(userId: string) {
-  return rateLimit(`video:${userId}`, 10, 60 * 60 * 1000) // 10 per hour
+export async function checkVideoRateLimit(userId: string): Promise<boolean> {
+  return rateLimit(`video:${userId}`, 10, 3600)
 }

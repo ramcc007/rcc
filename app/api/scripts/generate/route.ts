@@ -32,7 +32,7 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  if (!checkScriptRateLimit(ctx.userId)) {
+  if (!await checkScriptRateLimit(ctx.userId)) {
     return NextResponse.json(
       { error: 'Rate limit exceeded. Maximum 20 script generations per hour.' },
       { status: 429 }

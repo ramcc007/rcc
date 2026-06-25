@@ -38,7 +38,7 @@ export async function POST(request: NextRequest) {
     )
   }
 
-  if (!checkVideoRateLimit(ctx.userId)) {
+  if (!await checkVideoRateLimit(ctx.userId)) {
     return NextResponse.json(
       { error: 'Rate limit exceeded. Maximum 10 video generations per hour.' },
       { status: 429 }
