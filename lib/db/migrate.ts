@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS users (
   image TEXT,
   email_verified INTEGER,
   encrypted_gemini_key TEXT,
+  encrypted_fal_key TEXT,
   default_platform TEXT DEFAULT 'tiktok',
   default_aspect_ratio TEXT DEFAULT '9:16',
   created_at INTEGER DEFAULT (unixepoch()),
@@ -107,6 +108,8 @@ CREATE TABLE IF NOT EXISTS video_jobs (
   reference_image_urls TEXT,
   veo_job_id TEXT,
   veo_operation_name TEXT,
+  provider TEXT NOT NULL DEFAULT 'veo',
+  fal_request_id TEXT,
   status TEXT NOT NULL DEFAULT 'queued',
   output_url TEXT,
   thumbnail_url TEXT,
@@ -133,15 +136,32 @@ CREATE TABLE IF NOT EXISTS video_exports (
 );
 `
 
+// Incremental column additions — safe to re-run; errors are ignored
+const ALTER_MIGRATIONS = [
+  `ALTER TABLE users ADD COLUMN encrypted_fal_key TEXT`,
+  `ALTER TABLE video_jobs ADD COLUMN provider TEXT NOT NULL DEFAULT 'veo'`,
+  `ALTER TABLE video_jobs ADD COLUMN fal_request_id TEXT`,
+]
+
 export async function runMigrations() {
   const client = createClient({
     url: process.env.TURSO_DATABASE_URL ?? 'file:./dev.db',
     authToken: process.env.TURSO_AUTH_TOKEN,
   })
+
   const statements = CREATE_TABLES.split(';').map(s => s.trim()).filter(Boolean)
   for (const sql of statements) {
     await client.execute(sql)
   }
+
+  for (const sql of ALTER_MIGRATIONS) {
+    try {
+      await client.execute(sql)
+    } catch {
+      // Column already exists — safe to ignore
+    }
+  }
+
   client.close()
   console.log('Database migrations completed')
 }

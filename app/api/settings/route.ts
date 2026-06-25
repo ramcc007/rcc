@@ -21,6 +21,8 @@ export async function GET() {
     image: user.image,
     hasGeminiKey: !!user.encryptedGeminiKey,
     geminiKeyMasked: user.encryptedGeminiKey ? '••••••••••••••••' : null,
+    hasFalKey: !!user.encryptedFalKey,
+    falKeyMasked: user.encryptedFalKey ? '••••••••••••••••' : null,
     defaultPlatform: user.defaultPlatform,
     defaultAspectRatio: user.defaultAspectRatio,
   })
@@ -28,6 +30,7 @@ export async function GET() {
 
 const UpdateSettingsSchema = z.object({
   geminiApiKey: z.string().optional(),
+  falApiKey: z.string().optional(),
   defaultPlatform: z.string().optional(),
   defaultAspectRatio: z.string().optional(),
 })
@@ -46,6 +49,9 @@ export async function PUT(request: NextRequest) {
 
   if (parsed.data.geminiApiKey) {
     updates.encryptedGeminiKey = encryptApiKey(parsed.data.geminiApiKey)
+  }
+  if (parsed.data.falApiKey) {
+    updates.encryptedFalKey = encryptApiKey(parsed.data.falApiKey)
   }
   if (parsed.data.defaultPlatform) {
     updates.defaultPlatform = parsed.data.defaultPlatform

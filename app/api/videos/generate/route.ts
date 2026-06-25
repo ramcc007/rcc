@@ -4,6 +4,7 @@ import { db } from '@/lib/db'
 import { scripts, campaigns, videoJobs } from '@/lib/db/schema'
 import { eq, and } from 'drizzle-orm'
 import { initiateVideoGeneration } from '@/lib/veo/client'
+import { initiateFalVideoGeneration } from '@/lib/fal/client'
 import { buildVeoPromptFromScript } from '@/lib/gemini/prompts'
 import { checkVideoRateLimit } from '@/lib/rate-limit'
 import { v4 as uuidv4 } from 'uuid'
@@ -30,9 +31,9 @@ export async function POST(request: NextRequest) {
   const ctx = await requireAuth()
   if (isAuthError(ctx)) return ctx
 
-  if (!ctx.geminiApiKey) {
+  if (!ctx.falApiKey && !ctx.geminiApiKey) {
     return NextResponse.json(
-      { error: 'Gemini API key not configured. Please add your API key in Settings.' },
+      { error: 'No video generation API key configured. Add a fal.ai key (recommended) or Gemini key in Settings.' },
       { status: 422 }
     )
   }
@@ -77,8 +78,8 @@ export async function POST(request: NextRequest) {
   )
 
   const jobId = uuidv4()
+  const useFal = !!ctx.falApiKey
 
-  // Create job record immediately
   await db.insert(videoJobs).values({
     id: jobId,
     scriptId: script.id,
@@ -86,30 +87,56 @@ export async function POST(request: NextRequest) {
     resolution: parsed.data.resolution,
     characterDesc: JSON.stringify(parsed.data.characterDesc),
     referenceImageUrls: JSON.stringify(parsed.data.referenceImageUrls),
+    provider: useFal ? 'fal' : 'veo',
     status: 'queued',
   })
 
-  // Initiate async Veo generation (non-blocking)
-  initiateVideoGeneration({
-    prompt: veoPrompt,
-    aspectRatio: parsed.data.aspectRatio,
-    apiKey: ctx.geminiApiKey,
-  })
-    .then(async ({ operationName }) => {
-      await db
-        .update(videoJobs)
-        .set({ veoOperationName: operationName, status: 'generating' })
-        .where(eq(videoJobs.id, jobId))
+  if (useFal) {
+    // fal.ai (Kling) — non-blocking
+    initiateFalVideoGeneration({
+      prompt: veoPrompt,
+      aspectRatio: parsed.data.aspectRatio,
+      duration: script.duration <= 15 ? 5 : 10,
+      apiKey: ctx.falApiKey!,
     })
-    .catch(async (error) => {
-      await db
-        .update(videoJobs)
-        .set({
-          status: 'failed',
-          errorMessage: error instanceof Error ? error.message : 'Video generation failed to start',
-        })
-        .where(eq(videoJobs.id, jobId))
+      .then(async ({ requestId }) => {
+        await db
+          .update(videoJobs)
+          .set({ falRequestId: requestId, status: 'generating' })
+          .where(eq(videoJobs.id, jobId))
+      })
+      .catch(async (error) => {
+        await db
+          .update(videoJobs)
+          .set({
+            status: 'failed',
+            errorMessage: error instanceof Error ? error.message : 'fal.ai generation failed to start',
+          })
+          .where(eq(videoJobs.id, jobId))
+      })
+  } else {
+    // Veo fallback — non-blocking
+    initiateVideoGeneration({
+      prompt: veoPrompt,
+      aspectRatio: parsed.data.aspectRatio,
+      apiKey: ctx.geminiApiKey!,
     })
+      .then(async ({ operationName }) => {
+        await db
+          .update(videoJobs)
+          .set({ veoOperationName: operationName, status: 'generating' })
+          .where(eq(videoJobs.id, jobId))
+      })
+      .catch(async (error) => {
+        await db
+          .update(videoJobs)
+          .set({
+            status: 'failed',
+            errorMessage: error instanceof Error ? error.message : 'Veo generation failed to start',
+          })
+          .where(eq(videoJobs.id, jobId))
+      })
+  }
 
-  return NextResponse.json({ jobId }, { status: 202 })
+  return NextResponse.json({ jobId, provider: useFal ? 'fal' : 'veo' }, { status: 202 })
 }

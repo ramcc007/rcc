@@ -8,6 +8,7 @@ import { NextResponse } from 'next/server'
 export interface AuthContext {
   userId: string
   geminiApiKey: string | null
+  falApiKey: string | null
 }
 
 export async function requireAuth(): Promise<AuthContext | NextResponse> {
@@ -28,7 +29,16 @@ export async function requireAuth(): Promise<AuthContext | NextResponse> {
     }
   }
 
-  return { userId: session.user.id, geminiApiKey }
+  let falApiKey: string | null = null
+  if (user?.encryptedFalKey) {
+    try {
+      falApiKey = decryptApiKey(user.encryptedFalKey)
+    } catch {
+      falApiKey = null
+    }
+  }
+
+  return { userId: session.user.id, geminiApiKey, falApiKey }
 }
 
 export function isAuthError(result: AuthContext | NextResponse): result is NextResponse {

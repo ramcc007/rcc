@@ -1,13 +1,77 @@
 'use client'
 import { useState } from 'react'
-import { useQuery, useMutation } from '@tanstack/react-query'
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
-import { Eye, EyeOff, CheckCircle, XCircle, Loader2, Key } from 'lucide-react'
+import { Eye, EyeOff, CheckCircle, XCircle, Loader2, Key, Video, Sparkles } from 'lucide-react'
+
+function KeyField({
+  label,
+  description,
+  badge,
+  hasSaved,
+  savedMask,
+  placeholder,
+  accentColor,
+  onSave,
+  isSaving,
+  saveSuccess,
+}: {
+  label: string
+  description: React.ReactNode
+  badge?: React.ReactNode
+  hasSaved: boolean
+  savedMask: string | null
+  placeholder: string
+  accentColor: string
+  onSave: (key: string) => void
+  isSaving: boolean
+  saveSuccess: boolean
+}) {
+  const [value, setValue] = useState('')
+  const [show, setShow] = useState(false)
+
+  return (
+    <div className="space-y-3">
+      {hasSaved && (
+        <div className="flex items-center gap-2 bg-green-500/10 border border-green-500/20 rounded-lg px-3 py-2">
+          <CheckCircle className="w-4 h-4 text-green-400 flex-shrink-0" />
+          <span className="text-sm text-green-400">{label} configured</span>
+          <span className="text-xs text-[#555] ml-auto">{savedMask}</span>
+        </div>
+      )}
+      {badge}
+      <div className="relative">
+        <input
+          type={show ? 'text' : 'password'}
+          value={value}
+          onChange={e => setValue(e.target.value)}
+          placeholder={hasSaved ? 'Enter new key to replace...' : placeholder}
+          className="w-full bg-[#262626] border border-[#3a3a3a] rounded-xl px-4 py-2.5 text-white text-sm pr-10 focus:outline-none focus:border-violet-500 placeholder:text-[#555]"
+        />
+        <button
+          onClick={() => setShow(!show)}
+          className="absolute right-3 top-1/2 -translate-y-1/2 text-[#555] hover:text-[#a3a3a3]"
+        >
+          {show ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+        </button>
+      </div>
+      <button
+        onClick={() => { onSave(value); setValue('') }}
+        disabled={!value || isSaving}
+        className={`px-4 py-2 text-sm ${accentColor} text-white rounded-xl disabled:opacity-50 transition-colors flex items-center gap-2`}
+      >
+        {isSaving && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+        {saveSuccess ? 'Saved!' : `Save ${label}`}
+      </button>
+    </div>
+  )
+}
 
 export default function SettingsPage() {
   const { data: session } = useSession()
-  const [apiKey, setApiKey] = useState('')
-  const [showKey, setShowKey] = useState(false)
+  const qc = useQueryClient()
+  const [geminiKey, setGeminiKey] = useState('')
+  const [showGemini, setShowGemini] = useState(false)
   const [testResult, setTestResult] = useState<boolean | null>(null)
 
   const { data: settings } = useQuery({
@@ -15,14 +79,24 @@ export default function SettingsPage() {
     queryFn: () => fetch('/api/settings').then(r => r.json()),
   })
 
-  const saveMutation = useMutation({
+  const saveGeminiMutation = useMutation({
     mutationFn: (key: string) =>
       fetch('/api/settings', {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ geminiApiKey: key }),
       }).then(r => r.json()),
-    onSuccess: () => setApiKey(''),
+    onSuccess: () => { setGeminiKey(''); qc.invalidateQueries({ queryKey: ['settings'] }) },
+  })
+
+  const saveFalMutation = useMutation({
+    mutationFn: (key: string) =>
+      fetch('/api/settings', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ falApiKey: key }),
+      }).then(r => r.json()),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['settings'] }),
   })
 
   const testMutation = useMutation({
@@ -39,7 +113,7 @@ export default function SettingsPage() {
     <div className="max-w-2xl">
       <div className="mb-8">
         <h1 className="text-2xl font-bold text-white">Settings</h1>
-        <p className="text-[#a3a3a3] mt-1">Configure your Gemini API key and preferences.</p>
+        <p className="text-[#a3a3a3] mt-1">Configure your API keys and preferences.</p>
       </div>
 
       {/* Account */}
@@ -56,22 +130,51 @@ export default function SettingsPage() {
         </div>
       </section>
 
+      {/* fal.ai Key — primary video provider */}
+      <section className="bg-[#1a1a1a] border border-violet-500/30 rounded-xl p-5 mb-5">
+        <div className="flex items-center justify-between mb-1">
+          <div className="flex items-center gap-2">
+            <Video className="w-4 h-4 text-violet-400" />
+            <h2 className="text-sm font-semibold text-white">fal.ai API Key</h2>
+          </div>
+          <span className="text-xs bg-violet-600/20 text-violet-300 px-2 py-0.5 rounded-full font-medium">Recommended</span>
+        </div>
+        <p className="text-xs text-[#555] mb-4">
+          Powers video generation via <strong className="text-[#a3a3a3]">Kling 1.6</strong> — works without a Google Cloud billing account.
+          Sign up free at <span className="text-violet-400">fal.ai</span> → Dashboard → API Keys.
+          You get <strong className="text-[#a3a3a3]">$10 free credits</strong> on signup (~100 videos).
+        </p>
+
+        <KeyField
+          label="fal.ai key"
+          description={null}
+          hasSaved={!!settings?.hasFalKey}
+          savedMask={settings?.falKeyMasked}
+          placeholder="fal_key_..."
+          accentColor="bg-violet-600 hover:bg-violet-700"
+          onSave={(k) => saveFalMutation.mutate(k)}
+          isSaving={saveFalMutation.isPending}
+          saveSuccess={saveFalMutation.isSuccess}
+        />
+      </section>
+
       {/* Gemini API Key */}
       <section className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-5 mb-5">
         <div className="flex items-center gap-2 mb-1">
-          <Key className="w-4 h-4 text-violet-400" />
+          <Key className="w-4 h-4 text-[#a3a3a3]" />
           <h2 className="text-sm font-semibold text-white">Gemini API Key</h2>
+          <span className="text-xs text-[#555] ml-auto">For script generation</span>
         </div>
         <p className="text-xs text-[#555] mb-4">
-          Your API key is stored encrypted. Get your key from{' '}
-          <span className="text-violet-400">Google AI Studio</span> (aistudio.google.com).
-          Veo 3 video generation requires a paid Gemini Pro plan.
+          Required for AI script generation. Get your key from{' '}
+          <span className="text-violet-400">aistudio.google.com</span>.
+          Also used for Veo 3 video generation if you have access to it.
         </p>
 
         {settings?.hasGeminiKey && (
           <div className="flex items-center gap-2 mb-4 bg-green-500/10 border border-green-500/20 rounded-lg px-3 py-2">
             <CheckCircle className="w-4 h-4 text-green-400" />
-            <span className="text-sm text-green-400">API key configured</span>
+            <span className="text-sm text-green-400">Gemini key configured</span>
             <span className="text-xs text-[#555] ml-auto">{settings.geminiKeyMasked}</span>
           </div>
         )}
@@ -79,17 +182,17 @@ export default function SettingsPage() {
         <div className="space-y-3">
           <div className="relative">
             <input
-              type={showKey ? 'text' : 'password'}
-              value={apiKey}
-              onChange={e => { setApiKey(e.target.value); setTestResult(null) }}
+              type={showGemini ? 'text' : 'password'}
+              value={geminiKey}
+              onChange={e => { setGeminiKey(e.target.value); setTestResult(null) }}
               placeholder={settings?.hasGeminiKey ? 'Enter new key to replace...' : 'AIza...'}
               className="w-full bg-[#262626] border border-[#3a3a3a] rounded-xl px-4 py-2.5 text-white text-sm pr-10 focus:outline-none focus:border-violet-500 placeholder:text-[#555]"
             />
             <button
-              onClick={() => setShowKey(!showKey)}
+              onClick={() => setShowGemini(!showGemini)}
               className="absolute right-3 top-1/2 -translate-y-1/2 text-[#555] hover:text-[#a3a3a3]"
             >
-              {showKey ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+              {showGemini ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
           </div>
 
@@ -102,30 +205,39 @@ export default function SettingsPage() {
 
           <div className="flex gap-3">
             <button
-              onClick={() => testMutation.mutate(apiKey)}
-              disabled={!apiKey || testMutation.isPending}
+              onClick={() => testMutation.mutate(geminiKey)}
+              disabled={!geminiKey || testMutation.isPending}
               className="px-4 py-2 text-sm border border-[#3a3a3a] hover:border-[#4a4a4a] text-[#a3a3a3] hover:text-white rounded-xl disabled:opacity-50 transition-colors flex items-center gap-2"
             >
               {testMutation.isPending && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
               Test Key
             </button>
             <button
-              onClick={() => saveMutation.mutate(apiKey)}
-              disabled={!apiKey || saveMutation.isPending}
-              className="px-4 py-2 text-sm bg-violet-600 hover:bg-violet-700 text-white rounded-xl disabled:opacity-50 transition-colors flex items-center gap-2"
+              onClick={() => saveGeminiMutation.mutate(geminiKey)}
+              disabled={!geminiKey || saveGeminiMutation.isPending}
+              className="px-4 py-2 text-sm bg-[#262626] hover:bg-[#323232] border border-[#3a3a3a] text-white rounded-xl disabled:opacity-50 transition-colors flex items-center gap-2"
             >
-              {saveMutation.isPending && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
-              {saveMutation.isSuccess ? 'Saved!' : 'Save Key'}
+              {saveGeminiMutation.isPending && <Loader2 className="w-3.5 h-3.5 animate-spin" />}
+              {saveGeminiMutation.isSuccess ? 'Saved!' : 'Save Gemini Key'}
             </button>
           </div>
         </div>
       </section>
 
-      {/* Tip */}
-      <div className="bg-[#1a1a1a] border border-yellow-500/20 rounded-xl p-4">
-        <p className="text-xs text-yellow-400/80 font-medium mb-1">Veo 3 Access Required</p>
+      {/* How it works */}
+      <div className="bg-[#141414] border border-[#2a2a2a] rounded-xl p-4 space-y-2">
+        <div className="flex items-center gap-2 mb-2">
+          <Sparkles className="w-4 h-4 text-violet-400" />
+          <p className="text-xs font-medium text-white">How video generation works</p>
+        </div>
         <p className="text-xs text-[#555]">
-          Video generation requires Veo 3 API access. Make sure your Google AI Studio project has Veo 3 enabled. Script generation works with any Gemini API key.
+          <strong className="text-[#a3a3a3]">fal.ai key set →</strong> Videos generated via Kling 1.6 on fal.ai. Works for everyone, no Google billing needed.
+        </p>
+        <p className="text-xs text-[#555]">
+          <strong className="text-[#a3a3a3]">Only Gemini key →</strong> Uses Veo 3 via Google. Requires Veo API access on your Google account.
+        </p>
+        <p className="text-xs text-[#555]">
+          <strong className="text-[#a3a3a3]">Scripts always use Gemini</strong> regardless of which video provider you pick.
         </p>
       </div>
     </div>

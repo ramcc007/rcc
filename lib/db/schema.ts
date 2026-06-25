@@ -8,6 +8,7 @@ export const users = sqliteTable('users', {
   image: text('image'),
   emailVerified: integer('email_verified', { mode: 'timestamp' }),
   encryptedGeminiKey: text('encrypted_gemini_key'),
+  encryptedFalKey: text('encrypted_fal_key'),
   defaultPlatform: text('default_platform').default('tiktok'),
   defaultAspectRatio: text('default_aspect_ratio').default('9:16'),
   createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`(unixepoch())`),
@@ -105,6 +106,8 @@ export const videoJobs = sqliteTable('video_jobs', {
   referenceImageUrls: text('reference_image_urls'), // JSON array string
   veoJobId: text('veo_job_id'),
   veoOperationName: text('veo_operation_name'),
+  provider: text('provider').default('veo').notNull(),
+  falRequestId: text('fal_request_id'),
   status: text('status').default('queued').notNull(),
   outputUrl: text('output_url'),
   thumbnailUrl: text('thumbnail_url'),

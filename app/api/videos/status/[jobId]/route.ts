@@ -4,6 +4,7 @@ import { db } from '@/lib/db'
 import { videoJobs, scripts, campaigns } from '@/lib/db/schema'
 import { eq, and } from 'drizzle-orm'
 import { pollVideoOperation, downloadVideo } from '@/lib/veo/client'
+import { pollFalOperation, downloadFalVideo } from '@/lib/fal/client'
 import { saveUploadedFile } from '@/lib/storage'
 import { scoreQuality } from '@/lib/quality/scorer'
 import { checkCompliance } from '@/lib/compliance/engine'
@@ -32,13 +33,15 @@ export async function GET(
     .get()
   if (!campaign) return NextResponse.json({ error: 'Unauthorized' }, { status: 403 })
 
-  // If still generating, poll Veo
-  if (job.status === 'generating' && job.veoOperationName && ctx.geminiApiKey) {
+  if (job.status === 'generating') {
     try {
-      const result = await pollVideoOperation({
-        operationName: job.veoOperationName,
-        apiKey: ctx.geminiApiKey,
-      })
+      let result: { done: boolean; videoUrl?: string; error?: string } = { done: false }
+
+      if (job.provider === 'fal' && job.falRequestId && ctx.falApiKey) {
+        result = await pollFalOperation({ requestId: job.falRequestId, apiKey: ctx.falApiKey })
+      } else if (job.provider !== 'fal' && job.veoOperationName && ctx.geminiApiKey) {
+        result = await pollVideoOperation({ operationName: job.veoOperationName, apiKey: ctx.geminiApiKey })
+      }
 
       if (result.done) {
         if (result.error) {
@@ -47,15 +50,16 @@ export async function GET(
             .set({ status: 'failed', errorMessage: result.error })
             .where(eq(videoJobs.id, jobId))
         } else if (result.videoUrl) {
-          // Download and save the video
           await db.update(videoJobs).set({ status: 'post_processing' }).where(eq(videoJobs.id, jobId))
 
           try {
-            const buffer = await downloadVideo(result.videoUrl)
+            const buffer = job.provider === 'fal'
+              ? await downloadFalVideo(result.videoUrl)
+              : await downloadVideo(result.videoUrl)
+
             const filename = `${jobId}.mp4`
             const outputUrl = await saveUploadedFile(buffer, filename, 'videos')
 
-            // Run quality check
             const scriptContent: ScriptContent = JSON.parse(script.content)
             const qualityReport = scoreQuality({
               resolution: job.resolution,
@@ -64,8 +68,6 @@ export async function GET(
               visionScore: 20,
             })
 
-            // Run compliance check
-            const charDesc = job.characterDesc ? JSON.parse(job.characterDesc) : {}
             const complianceReport = checkCompliance({
               scriptText: scriptContent.fullText,
               platform: script.platform as never,
