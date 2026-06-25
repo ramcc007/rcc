@@ -1,7 +1,7 @@
 import { auth } from '@/lib/auth'
 import { db } from '@/lib/db'
 import { campaigns, videoJobs, scripts } from '@/lib/db/schema'
-import { eq, desc, count } from 'drizzle-orm'
+import { eq, desc, count, and } from 'drizzle-orm'
 import Link from 'next/link'
 import { PlusCircle, Video, Megaphone, Clock, TrendingUp } from 'lucide-react'
 import { formatDate, getStatusColor } from '@/lib/utils'
@@ -17,13 +17,40 @@ export default async function DashboardPage() {
     .orderBy(desc(campaigns.createdAt))
     .limit(5)
 
+  const [totalVideosRow, pendingReviewRow, approvedRow] = await Promise.all([
+    db
+      .select({ value: count() })
+      .from(videoJobs)
+      .innerJoin(scripts, eq(videoJobs.scriptId, scripts.id))
+      .innerJoin(campaigns, eq(scripts.campaignId, campaigns.id))
+      .where(eq(campaigns.userId, userId))
+      .get(),
+    db
+      .select({ value: count() })
+      .from(videoJobs)
+      .innerJoin(scripts, eq(videoJobs.scriptId, scripts.id))
+      .innerJoin(campaigns, eq(scripts.campaignId, campaigns.id))
+      .where(and(eq(campaigns.userId, userId), eq(videoJobs.status, 'review')))
+      .get(),
+    db
+      .select({ value: count() })
+      .from(videoJobs)
+      .innerJoin(scripts, eq(videoJobs.scriptId, scripts.id))
+      .innerJoin(campaigns, eq(scripts.campaignId, campaigns.id))
+      .where(and(eq(campaigns.userId, userId), eq(videoJobs.status, 'approved')))
+      .get(),
+  ])
+
   const totalCampaigns = userCampaigns.length
+  const totalVideos = totalVideosRow?.value ?? 0
+  const pendingReview = pendingReviewRow?.value ?? 0
+  const approvedCount = approvedRow?.value ?? 0
 
   const stats = [
     { label: 'Campaigns', value: totalCampaigns, icon: Megaphone, color: 'text-blue-400' },
-    { label: 'Videos Generated', value: 0, icon: Video, color: 'text-violet-400' },
-    { label: 'Pending Review', value: 0, icon: Clock, color: 'text-yellow-400' },
-    { label: 'Approved & Ready', value: 0, icon: TrendingUp, color: 'text-green-400' },
+    { label: 'Videos Generated', value: totalVideos, icon: Video, color: 'text-violet-400' },
+    { label: 'Pending Review', value: pendingReview, icon: Clock, color: 'text-yellow-400' },
+    { label: 'Approved & Ready', value: approvedCount, icon: TrendingUp, color: 'text-green-400' },
   ]
 
   return (
