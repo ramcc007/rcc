@@ -5,6 +5,8 @@ import { db } from '@/lib/db'
 import { users, accounts, sessions, verificationTokens } from '@/lib/db/schema'
 import { eq, and } from 'drizzle-orm'
 import { v4 as uuidv4 } from 'uuid'
+// Validate required env vars at server startup
+import '@/lib/env'
 
 const DrizzleAdapter: Adapter = {
   async createUser(data) {
