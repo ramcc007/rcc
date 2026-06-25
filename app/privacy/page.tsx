@@ -4,7 +4,6 @@ import { Video } from 'lucide-react'
 export default function PrivacyPolicyPage() {
   const EFFECTIVE_DATE = 'June 25, 2026'
   const CONTACT_EMAIL = 'onlinemoneyrcc@gmail.com'
-  const SITE_URL = 'https://ug-videos-rcc.netlify.app'
 
   return (
     <div className="min-h-screen bg-[#0f0f0f] text-[#fafafa]">
@@ -24,7 +23,7 @@ export default function PrivacyPolicyPage() {
         <div className="space-y-8 text-[#c3c3c3] text-sm leading-relaxed">
           <section>
             <h2 className="text-lg font-semibold text-white mb-3">1. Who We Are</h2>
-            <p>UGC Pro Studio (&ldquo;we&rdquo;, &ldquo;our&rdquo;, &ldquo;us&rdquo;) is a professional AI-powered video creation tool accessible at {SITE_URL}. We are operated as an independent service. Questions? Contact us at {CONTACT_EMAIL}.</p>
+            <p>UGC Pro Studio (&ldquo;we&rdquo;, &ldquo;our&rdquo;, &ldquo;us&rdquo;) is a professional AI-powered video creation tool. We are operated as an independent service. Questions? Contact us at {CONTACT_EMAIL}.</p>
           </section>
 
           <section>
