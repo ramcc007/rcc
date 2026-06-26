@@ -71,5 +71,5 @@ export async function generateScript(
   if (msg.includes('API_KEY_INVALID') || msg.includes('401')) {
     throw new Error('Invalid Gemini API key. Please update it in Settings.')
   }
-  throw new Error('Script generation failed. Please try again.')
+  throw new Error(`Script generation failed: ${msg}`)
 }
