@@ -29,7 +29,7 @@ export async function generateScript(
   // First attempt
   try {
     const response = await client.models.generateContent({
-      model: 'gemini-2.5-pro',
+      model: 'gemini-2.0-flash',
       contents: prompt,
       config: {
         temperature: 0.8,
@@ -42,7 +42,7 @@ export async function generateScript(
     try {
       const retryPrompt = prompt + '\n\nCRITICAL: Return ONLY the raw JSON object. No markdown. No code fences. No explanation. Start your response with { and end with }'
       const response = await client.models.generateContent({
-        model: 'gemini-2.5-pro',
+        model: 'gemini-2.0-flash',
         contents: retryPrompt,
         config: {
           temperature: 0.5,
