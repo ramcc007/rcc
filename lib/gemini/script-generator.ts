@@ -2,8 +2,9 @@ import { getGeminiClient } from './client'
 import { buildScriptPrompt } from './prompts'
 import type { ScriptGenerationParams, ScriptContent } from '@/lib/types'
 
+const MODELS = ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-pro']
+
 function parseScriptJson(raw: string): ScriptContent {
-  // Strip markdown code fences if present
   const cleaned = raw
     .replace(/^```json\s*/m, '')
     .replace(/^```\s*/m, '')
@@ -19,39 +20,56 @@ function parseScriptJson(raw: string): ScriptContent {
   return parsed as ScriptContent
 }
 
+function isQuotaError(err: unknown): boolean {
+  const msg = err instanceof Error ? err.message : String(err)
+  return msg.includes('quota') || msg.includes('RESOURCE_EXHAUSTED') || msg.includes('429')
+}
+
+async function tryGenerate(client: ReturnType<typeof getGeminiClient>, model: string, prompt: string): Promise<ScriptContent> {
+  const response = await client.models.generateContent({
+    model,
+    contents: prompt,
+    config: { temperature: 0.8, maxOutputTokens: 2048 },
+  })
+  return parseScriptJson(response.text ?? '')
+}
+
 export async function generateScript(
   params: ScriptGenerationParams,
   apiKey: string
 ): Promise<ScriptContent> {
   const client = getGeminiClient(apiKey)
   const prompt = buildScriptPrompt(params)
+  const strictPrompt = prompt + '\n\nCRITICAL: Return ONLY the raw JSON object. No markdown. No code fences. Start with { and end with }'
 
-  // First attempt
-  try {
-    const response = await client.models.generateContent({
-      model: 'gemini-2.0-flash',
-      contents: prompt,
-      config: {
-        temperature: 0.8,
-        maxOutputTokens: 2048,
-      },
-    })
-    return parseScriptJson(response.text ?? '')
-  } catch (firstError) {
-    // Retry with stricter instructions
+  let lastError: unknown
+
+  for (const model of MODELS) {
     try {
-      const retryPrompt = prompt + '\n\nCRITICAL: Return ONLY the raw JSON object. No markdown. No code fences. No explanation. Start your response with { and end with }'
-      const response = await client.models.generateContent({
-        model: 'gemini-2.0-flash',
-        contents: retryPrompt,
-        config: {
-          temperature: 0.5,
-          maxOutputTokens: 2048,
-        },
-      })
-      return parseScriptJson(response.text ?? '')
-    } catch {
-      throw new Error(`Script generation failed: ${firstError instanceof Error ? firstError.message : 'Unknown error'}`)
+      return await tryGenerate(client, model, prompt)
+    } catch (err) {
+      lastError = err
+      if (!isQuotaError(err)) {
+        // Non-quota error on first try: retry once with stricter prompt
+        try {
+          return await tryGenerate(client, model, strictPrompt)
+        } catch (retryErr) {
+          lastError = retryErr
+          // If still not quota-related, skip remaining models
+          if (!isQuotaError(retryErr)) break
+        }
+      }
+      // Quota error: try next model
     }
   }
+
+  // Translate common errors to friendly messages
+  const msg = lastError instanceof Error ? lastError.message : String(lastError)
+  if (isQuotaError(lastError)) {
+    throw new Error('Gemini API quota exceeded. Wait a minute and try again, or check your usage at ai.dev/rate-limit.')
+  }
+  if (msg.includes('API_KEY_INVALID') || msg.includes('401')) {
+    throw new Error('Invalid Gemini API key. Please update it in Settings.')
+  }
+  throw new Error('Script generation failed. Please try again.')
 }

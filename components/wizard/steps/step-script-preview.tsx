@@ -102,7 +102,7 @@ export function StepScriptPreview() {
         </div>
         <div className="text-center">
           <p className="text-white font-semibold text-lg">Writing your script...</p>
-          <p className="text-[#a3a3a3] text-sm mt-1">Gemini 2.5 Pro is crafting your {scriptFilters.duration}s {scriptFilters.hookType} script</p>
+          <p className="text-[#a3a3a3] text-sm mt-1">AI is crafting your {scriptFilters.duration}s {scriptFilters.hookType} script…</p>
         </div>
         <div className="flex gap-1">
           {[0, 1, 2].map(i => (
@@ -118,17 +118,27 @@ export function StepScriptPreview() {
   }
 
   if (generateMutation.isError) {
+    const errMsg = (generateMutation.error as Error).message ?? ''
+    const isQuota = errMsg.toLowerCase().includes('quota') || errMsg.includes('rate-limit')
+    const isKey = errMsg.toLowerCase().includes('api key') || errMsg.includes('Settings')
+
     return (
-      <div className="flex flex-col items-center justify-center py-16 gap-4 max-w-md">
+      <div className="flex flex-col items-center justify-center py-16 gap-4 max-w-md mx-auto">
         <div className="w-12 h-12 bg-red-500/20 rounded-2xl flex items-center justify-center">
           <AlertCircle className="w-6 h-6 text-red-400" />
         </div>
-        <div className="text-center">
+        <div className="text-center space-y-2">
           <p className="text-white font-semibold">Script generation failed</p>
-          <p className="text-[#a3a3a3] text-sm mt-1">{(generateMutation.error as Error).message}</p>
-          {(generateMutation.error as Error).message.includes('API key') && (
-            <a href="/settings" className="text-violet-400 text-sm underline mt-2 inline-block">
-              Configure your Gemini API key →
+          <p className="text-[#a3a3a3] text-sm">{errMsg}</p>
+          {isQuota && (
+            <p className="text-xs text-yellow-400 bg-yellow-900/20 border border-yellow-900/30 rounded-lg px-3 py-2">
+              Your Gemini free tier quota is full. Wait ~1 minute and try again, or check{' '}
+              <a href="https://ai.dev/rate-limit" target="_blank" rel="noreferrer" className="underline">ai.dev/rate-limit</a>.
+            </p>
+          )}
+          {isKey && (
+            <a href="/settings" className="text-violet-400 text-sm underline inline-block">
+              Update Gemini API key in Settings →
             </a>
           )}
         </div>
