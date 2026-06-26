@@ -48,7 +48,7 @@ export async function POST(
 
   const filename = `${ctx.userId}-${uuidv4()}.${ext}`
   const buffer = Buffer.from(await file.arrayBuffer())
-  const url = await saveUploadedFile(buffer, filename, 'brand')
+  const url = await saveUploadedFile(buffer, filename, 'brand', file.type)
 
   const assetId = uuidv4()
   await db.insert(brandAssets).values({
