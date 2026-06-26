@@ -5,8 +5,11 @@ import { eq, and, desc } from 'drizzle-orm'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { ArrowLeft, PlusCircle, RefreshCw } from 'lucide-react'
-import { formatDate, getStatusColor } from '@/lib/utils'
+import { formatDate } from '@/lib/utils'
 import { DeleteCampaignButton } from '@/components/campaigns/delete-campaign-button'
+import { DuplicateCampaignButton } from '@/components/campaigns/duplicate-campaign-button'
+import { ScriptHistory } from '@/components/campaigns/script-history'
+import { VideoJobRow } from '@/components/campaigns/video-job-row'
 
 export default async function CampaignDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const session = await auth()
@@ -48,7 +51,8 @@ export default async function CampaignDetailPage({ params }: { params: Promise<{
             {campaign.productName} · <span className="capitalize">{campaign.productCategory}</span>
           </p>
         </div>
-        <div className="flex items-center gap-2 flex-shrink-0">
+        <div className="flex items-center gap-2 flex-shrink-0 flex-wrap">
+          <DuplicateCampaignButton campaignId={id} />
           <Link
             href={`/create?campaignId=${id}`}
             className="flex items-center gap-2 bg-[#1a1a1a] hover:bg-[#262626] border border-[#2a2a2a] text-violet-400 hover:text-violet-300 text-sm font-medium px-4 py-2 rounded-xl transition-colors"
@@ -97,24 +101,14 @@ export default async function CampaignDetailPage({ params }: { params: Promise<{
         ) : (
           <div className="space-y-2">
             {allJobs.map(({ job, scriptPlatform }) => (
-              <div key={job.id} className="flex items-center justify-between bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl px-4 py-3">
-                <div>
-                  <p className="text-sm text-white">{job.aspectRatio} · {job.resolution}</p>
-                  <p className="text-xs text-[#555] capitalize">{scriptPlatform} · {formatDate(job.createdAt)}</p>
-                </div>
-                <div className="flex items-center gap-3">
-                  {job.qualityScore != null && (
-                    <span className="text-xs text-[#a3a3a3]">Quality: {Math.round(job.qualityScore)}</span>
-                  )}
-                  <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${getStatusColor(job.status)}`}>
-                    {job.status}
-                  </span>
-                </div>
-              </div>
+              <VideoJobRow key={job.id} job={job} scriptPlatform={scriptPlatform} />
             ))}
           </div>
         )}
       </div>
+
+      {/* Script history */}
+      <ScriptHistory scripts={campaignScripts} />
     </div>
   )
 }

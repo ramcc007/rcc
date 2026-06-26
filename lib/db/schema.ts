@@ -118,6 +118,7 @@ export const videoJobs = sqliteTable('video_jobs', {
   complianceScore: real('compliance_score'),
   complianceReport: text('compliance_report'), // JSON string
   errorMessage: text('error_message'),
+  performanceNotes: text('performance_notes'),
   createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`(unixepoch())`),
   updatedAt: integer('updated_at', { mode: 'timestamp' }).default(sql`(unixepoch())`),
 })
