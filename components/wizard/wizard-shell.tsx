@@ -1,4 +1,5 @@
 'use client'
+import { useEffect, useRef } from 'react'
 import { useWizardStore } from '@/lib/store/wizard-store'
 import { StepCampaignBrief } from './steps/step-campaign-brief'
 import { StepScriptFilters } from './steps/step-script-filters'
@@ -16,8 +17,33 @@ const STEPS = [
   { number: 5, label: 'Generate & Review' },
 ]
 
-export function WizardShell() {
-  const { currentStep } = useWizardStore()
+interface WizardShellProps {
+  preloadCampaignId?: string
+}
+
+export function WizardShell({ preloadCampaignId }: WizardShellProps) {
+  const { currentStep, preloadCampaign, reset } = useWizardStore()
+  const preloaded = useRef(false)
+
+  useEffect(() => {
+    if (!preloadCampaignId || preloaded.current) return
+    preloaded.current = true
+    reset()
+    fetch(`/api/campaigns/${preloadCampaignId}`)
+      .then(r => r.json())
+      .then(({ campaign }) => {
+        if (!campaign) return
+        preloadCampaign(campaign.id, {
+          name: campaign.name,
+          productName: campaign.productName,
+          productCategory: campaign.productCategory,
+          targetAudience: campaign.targetAudience ?? '',
+          brandVoice: campaign.brandVoice ?? '',
+          competitorNames: campaign.competitorNames ?? [],
+        })
+      })
+      .catch(() => {/* silently fall back to step 1 */})
+  }, [preloadCampaignId, preloadCampaign, reset])
 
   return (
     <div className="max-w-3xl">

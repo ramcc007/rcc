@@ -41,7 +41,7 @@ export function Sidebar({ isOpen = false, onClose }: SidebarProps) {
           </div>
           <div>
             <p className="text-sm font-bold text-white leading-tight">UGC Pro Studio</p>
-            <p className="text-xs text-[#a3a3a3]">Powered by Gemini</p>
+            <p className="text-xs text-[#a3a3a3]">AI Video Studio</p>
           </div>
         </Link>
         <button

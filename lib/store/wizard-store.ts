@@ -34,6 +34,7 @@ interface WizardState {
   setScriptFilters: (filters: Partial<ScriptFilters>) => void
   setGeneratedScript: (script: ScriptContent) => void
   setVideoSettings: (settings: Partial<VideoSettings>) => void
+  preloadCampaign: (id: string, data: Partial<CampaignBrief>) => void
   reset: () => void
 }
 
@@ -84,6 +85,8 @@ export const useWizardStore = create<WizardState>((set) => ({
   setGeneratedScript: (script) => set({ generatedScript: script }),
   setVideoSettings: (settings) =>
     set((s) => ({ videoSettings: { ...s.videoSettings, ...settings } })),
+  preloadCampaign: (id, data) =>
+    set({ campaignId: id, campaignData: data, currentStep: 2, scriptId: null, activeJobId: null, generatedScript: null }),
   reset: () =>
     set({
       currentStep: 1,

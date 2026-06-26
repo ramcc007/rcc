@@ -4,8 +4,9 @@ import { campaigns, scripts, videoJobs } from '@/lib/db/schema'
 import { eq, and, desc } from 'drizzle-orm'
 import { notFound } from 'next/navigation'
 import Link from 'next/link'
-import { ArrowLeft, PlusCircle } from 'lucide-react'
+import { ArrowLeft, PlusCircle, RefreshCw } from 'lucide-react'
 import { formatDate, getStatusColor } from '@/lib/utils'
+import { DeleteCampaignButton } from '@/components/campaigns/delete-campaign-button'
 
 export default async function CampaignDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const session = await auth()
@@ -26,7 +27,6 @@ export default async function CampaignDetailPage({ params }: { params: Promise<{
     .where(eq(scripts.campaignId, id))
     .orderBy(desc(scripts.createdAt))
 
-  // Get video jobs for these scripts
   const allJobs = campaignScripts.length > 0
     ? await db
         .select({ job: videoJobs, scriptPlatform: scripts.platform })
@@ -38,28 +38,40 @@ export default async function CampaignDetailPage({ params }: { params: Promise<{
 
   return (
     <div className="max-w-4xl">
-      <div className="flex items-center gap-3 mb-6">
+      <div className="flex items-center gap-3 mb-6 flex-wrap">
         <Link href="/campaigns" className="text-[#a3a3a3] hover:text-white transition-colors">
           <ArrowLeft className="w-5 h-5" />
         </Link>
-        <div className="flex-1">
-          <h1 className="text-2xl font-bold text-white">{campaign.name}</h1>
+        <div className="flex-1 min-w-0">
+          <h1 className="text-2xl font-bold text-white truncate">{campaign.name}</h1>
           <p className="text-[#a3a3a3] text-sm mt-0.5">
             {campaign.productName} · <span className="capitalize">{campaign.productCategory}</span>
           </p>
         </div>
-        <Link
-          href="/create"
-          className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white text-sm font-medium px-4 py-2 rounded-xl transition-colors"
-        >
-          <PlusCircle className="w-4 h-4" />
-          New Video
-        </Link>
+        <div className="flex items-center gap-2 flex-shrink-0">
+          <Link
+            href={`/create?campaignId=${id}`}
+            className="flex items-center gap-2 bg-[#1a1a1a] hover:bg-[#262626] border border-[#2a2a2a] text-violet-400 hover:text-violet-300 text-sm font-medium px-4 py-2 rounded-xl transition-colors"
+          >
+            <RefreshCw className="w-4 h-4" />
+            Rebuild
+          </Link>
+          <Link
+            href="/create"
+            className="flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white text-sm font-medium px-4 py-2 rounded-xl transition-colors"
+          >
+            <PlusCircle className="w-4 h-4" />
+            New Video
+          </Link>
+        </div>
       </div>
 
       {/* Brief */}
       <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-5 mb-6">
-        <h2 className="text-sm font-semibold text-white mb-3">Campaign Brief</h2>
+        <div className="flex items-center justify-between mb-3">
+          <h2 className="text-sm font-semibold text-white">Campaign Brief</h2>
+          <DeleteCampaignButton campaignId={id} campaignName={campaign.name} redirectAfter />
+        </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 text-sm">
           <div><span className="text-[#555]">Target Audience:</span> <span className="text-[#a3a3a3] ml-1">{campaign.targetAudience}</span></div>
           {campaign.brandVoice && <div><span className="text-[#555]">Brand Voice:</span> <span className="text-[#a3a3a3] ml-1">{campaign.brandVoice}</span></div>}
@@ -73,7 +85,14 @@ export default async function CampaignDetailPage({ params }: { params: Promise<{
         <h2 className="text-sm font-semibold text-white mb-3">Videos ({allJobs.length})</h2>
         {allJobs.length === 0 ? (
           <div className="text-center py-12 border border-dashed border-[#2a2a2a] rounded-xl">
-            <p className="text-[#a3a3a3] text-sm">No videos generated for this campaign yet.</p>
+            <p className="text-[#a3a3a3] text-sm mb-4">No videos generated for this campaign yet.</p>
+            <Link
+              href={`/create?campaignId=${id}`}
+              className="inline-flex items-center gap-2 bg-violet-600 hover:bg-violet-700 text-white text-sm font-medium px-4 py-2 rounded-xl transition-colors"
+            >
+              <RefreshCw className="w-4 h-4" />
+              Generate First Video
+            </Link>
           </div>
         ) : (
           <div className="space-y-2">

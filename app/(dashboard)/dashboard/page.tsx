@@ -60,7 +60,7 @@ export default async function DashboardPage() {
         <h1 className="text-2xl font-bold text-white">
           Welcome back{session?.user?.name ? `, ${session.user.name.split(' ')[0]}` : ''}
         </h1>
-        <p className="text-[#a3a3a3] mt-1">Create professional UGC videos powered by your Gemini account.</p>
+        <p className="text-[#a3a3a3] mt-1">Create professional UGC videos powered by AI.</p>
       </div>
 
       {/* Stats */}
@@ -83,7 +83,7 @@ export default async function DashboardPage() {
       <div className="bg-gradient-to-r from-violet-900/40 to-violet-600/10 border border-violet-500/20 rounded-2xl p-6">
         <h2 className="text-lg font-semibold text-white mb-2">Ready to create?</h2>
         <p className="text-[#a3a3a3] text-sm mb-4 max-w-lg">
-          Generate a professional UGC video script with AI, choose your character style, and produce a Veo 3 video — all in under 5 minutes.
+          Generate a professional UGC video script with AI, choose your character style, and produce an AI video — all in under 5 minutes.
         </p>
         <Link
           href="/create"

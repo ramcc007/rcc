@@ -3,8 +3,9 @@ import { db } from '@/lib/db'
 import { campaigns } from '@/lib/db/schema'
 import { eq, desc } from 'drizzle-orm'
 import Link from 'next/link'
-import { PlusCircle, Megaphone } from 'lucide-react'
+import { PlusCircle, Megaphone, RefreshCw } from 'lucide-react'
 import { formatDate, getStatusColor } from '@/lib/utils'
+import { DeleteCampaignButton } from '@/components/campaigns/delete-campaign-button'
 
 export default async function CampaignsPage() {
   const session = await auth()
@@ -45,29 +46,36 @@ export default async function CampaignsPage() {
       ) : (
         <div className="space-y-2">
           {userCampaigns.map(campaign => (
-            <Link
+            <div
               key={campaign.id}
-              href={`/campaigns/${campaign.id}`}
-              className="flex items-center justify-between bg-[#1a1a1a] border border-[#2a2a2a] hover:border-[#3a3a3a] rounded-xl px-5 py-4 transition-colors group"
+              className="bg-[#1a1a1a] border border-[#2a2a2a] hover:border-[#3a3a3a] rounded-xl px-5 py-4 transition-colors"
             >
               <div className="flex items-center gap-4">
-                <div className="w-10 h-10 bg-violet-600/10 rounded-xl flex items-center justify-center">
+                <div className="w-10 h-10 bg-violet-600/10 rounded-xl flex items-center justify-center flex-shrink-0">
                   <Megaphone className="w-5 h-5 text-violet-400" />
                 </div>
-                <div>
-                  <p className="text-white font-medium group-hover:text-violet-300 transition-colors">{campaign.name}</p>
+                <Link href={`/campaigns/${campaign.id}`} className="flex-1 min-w-0 group">
+                  <p className="text-white font-medium group-hover:text-violet-300 transition-colors truncate">{campaign.name}</p>
                   <p className="text-sm text-[#a3a3a3]">
                     {campaign.productName} · <span className="capitalize">{campaign.productCategory}</span>
                   </p>
+                </Link>
+                <div className="flex items-center gap-3 flex-shrink-0">
+                  <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${getStatusColor(campaign.status ?? 'draft')}`}>
+                    {campaign.status}
+                  </span>
+                  <span className="text-xs text-[#555] hidden sm:block">{formatDate(campaign.createdAt)}</span>
+                  <Link
+                    href={`/create?campaignId=${campaign.id}`}
+                    className="flex items-center gap-1.5 text-xs px-3 py-1.5 text-violet-400 hover:text-violet-300 hover:bg-violet-900/20 border border-violet-900/30 rounded-lg transition-colors"
+                  >
+                    <RefreshCw className="w-3.5 h-3.5" />
+                    Rebuild
+                  </Link>
+                  <DeleteCampaignButton campaignId={campaign.id} campaignName={campaign.name} />
                 </div>
               </div>
-              <div className="flex items-center gap-4">
-                <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${getStatusColor(campaign.status ?? 'draft')}`}>
-                  {campaign.status}
-                </span>
-                <span className="text-xs text-[#555]">{formatDate(campaign.createdAt)}</span>
-              </div>
-            </Link>
+            </div>
           ))}
         </div>
       )}
