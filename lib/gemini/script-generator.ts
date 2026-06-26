@@ -2,7 +2,8 @@ import { getGeminiClient } from './client'
 import { buildScriptPrompt } from './prompts'
 import type { ScriptGenerationParams, ScriptContent } from '@/lib/types'
 
-const MODELS = ['gemini-2.0-flash', 'gemini-1.5-flash', 'gemini-1.5-pro']
+// Only models available in the @google/genai v1beta endpoint
+const MODELS = ['gemini-2.0-flash', 'gemini-2.0-flash-lite', 'gemini-2.5-flash-lite-preview-06-17']
 
 function parseScriptJson(raw: string): ScriptContent {
   const cleaned = raw
@@ -49,17 +50,13 @@ export async function generateScript(
       return await tryGenerate(client, model, prompt)
     } catch (err) {
       lastError = err
-      if (!isQuotaError(err)) {
-        // Non-quota error on first try: retry once with stricter prompt
-        try {
-          return await tryGenerate(client, model, strictPrompt)
-        } catch (retryErr) {
-          lastError = retryErr
-          // If still not quota-related, skip remaining models
-          if (!isQuotaError(retryErr)) break
-        }
+      // On first fail, retry with stricter JSON prompt
+      try {
+        return await tryGenerate(client, model, strictPrompt)
+      } catch (retryErr) {
+        lastError = retryErr
+        // Always continue to next model
       }
-      // Quota error: try next model
     }
   }
 
