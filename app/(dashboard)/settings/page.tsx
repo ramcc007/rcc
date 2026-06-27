@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
-import { Eye, EyeOff, CheckCircle, XCircle, Loader2, Key, Video, Sparkles } from 'lucide-react'
+import { Eye, EyeOff, CheckCircle, XCircle, Loader2, Key, Video, Sparkles, Trash2 } from 'lucide-react'
 
 function KeyField({
   label,
@@ -109,6 +109,12 @@ export default function SettingsPage() {
     onSuccess: (data) => setTestResult(data.valid),
   })
 
+  const deleteKeyMutation = useMutation({
+    mutationFn: (keyType: 'gemini' | 'fal') =>
+      fetch(`/api/settings?key=${keyType}`, { method: 'DELETE' }).then(r => r.json()),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['settings'] }),
+  })
+
   return (
     <div className="max-w-2xl">
       <div className="mb-8">
@@ -145,11 +151,27 @@ export default function SettingsPage() {
           You get <strong className="text-[#a3a3a3]">$10 free credits</strong> on signup (~100 videos).
         </p>
 
+        {settings?.hasFalKey && (
+          <div className="flex items-center gap-2 bg-green-500/10 border border-green-500/20 rounded-lg px-3 py-2 mb-3">
+            <CheckCircle className="w-4 h-4 text-green-400 flex-shrink-0" />
+            <span className="text-sm text-green-400">fal.ai key configured</span>
+            <span className="text-xs text-[#555] ml-auto mr-2">{settings.falKeyMasked}</span>
+            <button
+              onClick={() => deleteKeyMutation.mutate('fal')}
+              disabled={deleteKeyMutation.isPending}
+              className="flex items-center gap-1 text-xs text-red-400 hover:text-red-300 transition-colors disabled:opacity-50"
+              title="Remove key"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+              Remove
+            </button>
+          </div>
+        )}
         <KeyField
           label="fal.ai key"
           description={null}
-          hasSaved={!!settings?.hasFalKey}
-          savedMask={settings?.falKeyMasked}
+          hasSaved={false}
+          savedMask={null}
           placeholder="fal_key_..."
           accentColor="bg-violet-600 hover:bg-violet-700"
           onSave={(k) => saveFalMutation.mutate(k)}
@@ -173,9 +195,18 @@ export default function SettingsPage() {
 
         {settings?.hasGeminiKey && (
           <div className="flex items-center gap-2 mb-4 bg-green-500/10 border border-green-500/20 rounded-lg px-3 py-2">
-            <CheckCircle className="w-4 h-4 text-green-400" />
+            <CheckCircle className="w-4 h-4 text-green-400 flex-shrink-0" />
             <span className="text-sm text-green-400">Gemini key configured</span>
-            <span className="text-xs text-[#555] ml-auto">{settings.geminiKeyMasked}</span>
+            <span className="text-xs text-[#555] ml-auto mr-2">{settings.geminiKeyMasked}</span>
+            <button
+              onClick={() => deleteKeyMutation.mutate('gemini')}
+              disabled={deleteKeyMutation.isPending}
+              className="flex items-center gap-1 text-xs text-red-400 hover:text-red-300 transition-colors disabled:opacity-50"
+              title="Remove key"
+            >
+              <Trash2 className="w-3.5 h-3.5" />
+              Remove
+            </button>
           </div>
         )}
 

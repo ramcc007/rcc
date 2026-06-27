@@ -67,6 +67,24 @@ export async function PUT(request: NextRequest) {
   return NextResponse.json({ success: true })
 }
 
+export async function DELETE(request: NextRequest) {
+  const ctx = await requireAuth()
+  if (isAuthError(ctx)) return ctx
+
+  const { searchParams } = new URL(request.url)
+  const key = searchParams.get('key')
+
+  if (key === 'gemini') {
+    await db.update(users).set({ encryptedGeminiKey: null }).where(eq(users.id, ctx.userId))
+  } else if (key === 'fal') {
+    await db.update(users).set({ encryptedFalKey: null }).where(eq(users.id, ctx.userId))
+  } else {
+    return NextResponse.json({ error: 'Invalid key type' }, { status: 400 })
+  }
+
+  return NextResponse.json({ success: true })
+}
+
 export async function POST(request: NextRequest) {
   const ctx = await requireAuth()
   if (isAuthError(ctx)) return ctx
