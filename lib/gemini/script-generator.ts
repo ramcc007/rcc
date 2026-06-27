@@ -63,7 +63,7 @@ export async function generateScript(
   // Translate common errors to friendly messages
   const msg = lastError instanceof Error ? lastError.message : String(lastError)
   if (isQuotaError(lastError)) {
-    throw new Error('Gemini API quota exceeded. Your API key may be linked to a billing-enabled project — create a fresh key on a new project at aistudio.google.com.')
+    throw new Error(`Gemini quota error: ${msg}. Your API key may be linked to a billing-enabled project — create a fresh key on a new project at aistudio.google.com.`)
   }
   if (msg.includes('API_KEY_INVALID') || msg.includes('401')) {
     throw new Error('Invalid Gemini API key. Please update it in Settings.')

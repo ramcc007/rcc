@@ -7,9 +7,13 @@ export function getGeminiClient(apiKey: string) {
 export async function testApiKey(apiKey: string): Promise<boolean> {
   try {
     const client = getGeminiClient(apiKey)
-    // List models — lightweight auth check, no token cost, works for all valid keys
-    const models = client.models.list()
-    return !!(await models)
+    // Minimal generation test — verifies both auth AND generation quota
+    await client.models.generateContent({
+      model: 'gemini-2.0-flash',
+      contents: 'Reply with the word ok.',
+      config: { maxOutputTokens: 5 },
+    })
+    return true
   } catch {
     return false
   }
