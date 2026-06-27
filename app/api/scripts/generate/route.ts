@@ -4,6 +4,7 @@ import { db } from '@/lib/db'
 import { campaigns, scripts } from '@/lib/db/schema'
 import { eq, and } from 'drizzle-orm'
 import { generateScript } from '@/lib/gemini/script-generator'
+import { generateScriptWithGroq } from '@/lib/groq/script-generator'
 import { checkScriptRateLimit } from '@/lib/rate-limit'
 import { logError } from '@/lib/log-error'
 import { v4 as uuidv4 } from 'uuid'
@@ -26,9 +27,9 @@ export async function POST(request: NextRequest) {
   const ctx = await requireAuth()
   if (isAuthError(ctx)) return ctx
 
-  if (!ctx.geminiApiKey) {
+  if (!ctx.groqApiKey && !ctx.geminiApiKey) {
     return NextResponse.json(
-      { error: 'Gemini API key not configured. Please add your API key in Settings.' },
+      { error: 'No AI key configured. Add a Groq API key (free) or Gemini key in Settings.' },
       { status: 422 }
     )
   }
@@ -56,24 +57,27 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'Campaign not found' }, { status: 404 })
   }
 
+  const scriptParams = {
+    productName: campaign.productName,
+    productCategory: campaign.productCategory as never,
+    targetAudience: campaign.targetAudience,
+    brandVoice: campaign.brandVoice ?? undefined,
+    competitorNames: campaign.competitorNames ? JSON.parse(campaign.competitorNames) : undefined,
+    hookType: parsed.data.filters.hookType as never,
+    funnelStage: parsed.data.filters.funnelStage as never,
+    ctaType: parsed.data.filters.ctaType as never,
+    tone: parsed.data.filters.tone as never,
+    platform: parsed.data.filters.platform as never,
+    duration: parsed.data.filters.duration,
+    persona: parsed.data.filters.persona as never,
+  }
+
   try {
-    const scriptContent = await generateScript(
-      {
-        productName: campaign.productName,
-        productCategory: campaign.productCategory as never,
-        targetAudience: campaign.targetAudience,
-        brandVoice: campaign.brandVoice ?? undefined,
-        competitorNames: campaign.competitorNames ? JSON.parse(campaign.competitorNames) : undefined,
-        hookType: parsed.data.filters.hookType as never,
-        funnelStage: parsed.data.filters.funnelStage as never,
-        ctaType: parsed.data.filters.ctaType as never,
-        tone: parsed.data.filters.tone as never,
-        platform: parsed.data.filters.platform as never,
-        duration: parsed.data.filters.duration,
-        persona: parsed.data.filters.persona as never,
-      },
-      ctx.geminiApiKey
-    )
+    // Groq is preferred (free, fast, no billing issues)
+    // Fall back to Gemini if Groq key not set
+    const scriptContent = ctx.groqApiKey
+      ? await generateScriptWithGroq(scriptParams, ctx.groqApiKey)
+      : await generateScript(scriptParams, ctx.geminiApiKey!)
 
     const id = uuidv4()
     await db.insert(scripts).values({

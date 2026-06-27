@@ -7,6 +7,7 @@ import { NextResponse } from 'next/server'
 
 export interface AuthContext {
   userId: string
+  groqApiKey: string | null
   geminiApiKey: string | null
   falApiKey: string | null
 }
@@ -19,6 +20,15 @@ export async function requireAuth(): Promise<AuthContext | NextResponse> {
   }
 
   const user = await db.select().from(users).where(eq(users.id, session.user.id)).get()
+
+  let groqApiKey: string | null = null
+  if (user?.encryptedGroqKey) {
+    try {
+      groqApiKey = decryptApiKey(user.encryptedGroqKey)
+    } catch {
+      groqApiKey = null
+    }
+  }
 
   let geminiApiKey: string | null = null
   if (user?.encryptedGeminiKey) {
@@ -38,7 +48,7 @@ export async function requireAuth(): Promise<AuthContext | NextResponse> {
     }
   }
 
-  return { userId: session.user.id, geminiApiKey, falApiKey }
+  return { userId: session.user.id, groqApiKey, geminiApiKey, falApiKey }
 }
 
 export function isAuthError(result: AuthContext | NextResponse): result is NextResponse {

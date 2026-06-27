@@ -7,6 +7,7 @@ export const users = sqliteTable('users', {
   name: text('name'),
   image: text('image'),
   emailVerified: integer('email_verified', { mode: 'timestamp' }),
+  encryptedGroqKey: text('encrypted_groq_key'),
   encryptedGeminiKey: text('encrypted_gemini_key'),
   encryptedFalKey: text('encrypted_fal_key'),
   defaultPlatform: text('default_platform').default('tiktok'),

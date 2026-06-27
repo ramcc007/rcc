@@ -5,6 +5,7 @@ import { users } from '@/lib/db/schema'
 import { eq } from 'drizzle-orm'
 import { encryptApiKey } from '@/lib/crypto'
 import { testApiKey } from '@/lib/gemini/client'
+import { testGroqApiKey } from '@/lib/groq/client'
 import { z } from 'zod'
 
 export async function GET() {
@@ -19,6 +20,8 @@ export async function GET() {
     email: user.email,
     name: user.name,
     image: user.image,
+    hasGroqKey: !!user.encryptedGroqKey,
+    groqKeyMasked: user.encryptedGroqKey ? '••••••••••••••••' : null,
     hasGeminiKey: !!user.encryptedGeminiKey,
     geminiKeyMasked: user.encryptedGeminiKey ? '••••••••••••••••' : null,
     hasFalKey: !!user.encryptedFalKey,
@@ -29,6 +32,7 @@ export async function GET() {
 }
 
 const UpdateSettingsSchema = z.object({
+  groqApiKey: z.string().optional(),
   geminiApiKey: z.string().optional(),
   falApiKey: z.string().optional(),
   defaultPlatform: z.string().optional(),
@@ -47,6 +51,9 @@ export async function PUT(request: NextRequest) {
 
   const updates: Partial<typeof users.$inferInsert> = {}
 
+  if (parsed.data.groqApiKey) {
+    updates.encryptedGroqKey = encryptApiKey(parsed.data.groqApiKey)
+  }
   if (parsed.data.geminiApiKey) {
     updates.encryptedGeminiKey = encryptApiKey(parsed.data.geminiApiKey)
   }
@@ -78,6 +85,8 @@ export async function DELETE(request: NextRequest) {
     await db.update(users).set({ encryptedGeminiKey: null }).where(eq(users.id, ctx.userId))
   } else if (key === 'fal') {
     await db.update(users).set({ encryptedFalKey: null }).where(eq(users.id, ctx.userId))
+  } else if (key === 'groq') {
+    await db.update(users).set({ encryptedGroqKey: null }).where(eq(users.id, ctx.userId))
   } else {
     return NextResponse.json({ error: 'Invalid key type' }, { status: 400 })
   }
@@ -93,6 +102,11 @@ export async function POST(request: NextRequest) {
 
   if (body.action === 'test-api-key' && body.apiKey) {
     const isValid = await testApiKey(body.apiKey)
+    return NextResponse.json({ valid: isValid })
+  }
+
+  if (body.action === 'test-groq-key' && body.apiKey) {
+    const isValid = await testGroqApiKey(body.apiKey)
     return NextResponse.json({ valid: isValid })
   }
 

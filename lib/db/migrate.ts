@@ -161,6 +161,7 @@ const ALTER_MIGRATIONS = [
   `ALTER TABLE video_jobs ADD COLUMN provider TEXT NOT NULL DEFAULT 'veo'`,
   `ALTER TABLE video_jobs ADD COLUMN fal_request_id TEXT`,
   `ALTER TABLE video_jobs ADD COLUMN performance_notes TEXT`,
+  `ALTER TABLE users ADD COLUMN encrypted_groq_key TEXT`,
 ]
 
 export async function runMigrations() {
