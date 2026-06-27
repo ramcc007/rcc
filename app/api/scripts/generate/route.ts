@@ -5,6 +5,7 @@ import { campaigns, scripts } from '@/lib/db/schema'
 import { eq, and } from 'drizzle-orm'
 import { generateScript } from '@/lib/gemini/script-generator'
 import { checkScriptRateLimit } from '@/lib/rate-limit'
+import { logError } from '@/lib/log-error'
 import { v4 as uuidv4 } from 'uuid'
 import { z } from 'zod'
 
@@ -90,6 +91,7 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json({ scriptId: id, content: scriptContent }, { status: 201 })
   } catch (error) {
+    await logError(ctx.userId, '/api/scripts/generate', error)
     return NextResponse.json(
       { error: error instanceof Error ? error.message : 'Script generation failed' },
       { status: 422 }

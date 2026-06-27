@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { useSession } from 'next-auth/react'
-import { Eye, EyeOff, CheckCircle, XCircle, Loader2, Key, Video, Sparkles, Trash2 } from 'lucide-react'
+import { Eye, EyeOff, CheckCircle, XCircle, Loader2, Key, Video, Sparkles, Trash2, AlertTriangle, Copy, Check } from 'lucide-react'
 
 function KeyField({
   label,
@@ -271,6 +271,89 @@ export default function SettingsPage() {
           <strong className="text-[#a3a3a3]">Scripts always use Gemini</strong> regardless of which video provider you pick.
         </p>
       </div>
+
+      {/* Error Log */}
+      <ErrorLog />
     </div>
+  )
+}
+
+function ErrorLog() {
+  const [copied, setCopied] = useState(false)
+  const qc = useQueryClient()
+
+  const { data, isLoading } = useQuery({
+    queryKey: ['debug-errors'],
+    queryFn: () => fetch('/api/debug/errors').then(r => r.json()),
+  })
+
+  const clearMutation = useMutation({
+    mutationFn: () => fetch('/api/debug/errors', { method: 'DELETE' }).then(r => r.json()),
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['debug-errors'] }),
+  })
+
+  const errors: Array<{ id: number; route: string; errorMessage: string; errorDetail: string | null; createdAt: number }> = data?.errors ?? []
+
+  function copyAll() {
+    const text = errors.map(e =>
+      `[${new Date((e.createdAt ?? 0) * 1000).toISOString()}] ${e.route}\n${e.errorDetail ?? e.errorMessage}`
+    ).join('\n\n---\n\n')
+    navigator.clipboard.writeText(text)
+    setCopied(true)
+    setTimeout(() => setCopied(false), 2000)
+  }
+
+  return (
+    <section className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-xl p-5 mt-5">
+      <div className="flex items-center justify-between mb-4">
+        <div className="flex items-center gap-2">
+          <AlertTriangle className="w-4 h-4 text-yellow-500" />
+          <h2 className="text-sm font-semibold text-white">Error Log</h2>
+          {errors.length > 0 && (
+            <span className="text-xs bg-red-500/20 text-red-400 px-2 py-0.5 rounded-full">{errors.length}</span>
+          )}
+        </div>
+        {errors.length > 0 && (
+          <div className="flex gap-2">
+            <button
+              onClick={copyAll}
+              className="flex items-center gap-1 text-xs text-[#a3a3a3] hover:text-white transition-colors"
+            >
+              {copied ? <Check className="w-3.5 h-3.5 text-green-400" /> : <Copy className="w-3.5 h-3.5" />}
+              {copied ? 'Copied!' : 'Copy all'}
+            </button>
+            <button
+              onClick={() => clearMutation.mutate()}
+              disabled={clearMutation.isPending}
+              className="text-xs text-red-400 hover:text-red-300 transition-colors disabled:opacity-50"
+            >
+              Clear
+            </button>
+          </div>
+        )}
+      </div>
+
+      {isLoading && <p className="text-xs text-[#555]">Loading...</p>}
+
+      {!isLoading && errors.length === 0 && (
+        <p className="text-xs text-[#555]">No errors logged. Errors from script and video generation will appear here.</p>
+      )}
+
+      {errors.length > 0 && (
+        <div className="space-y-2 max-h-80 overflow-y-auto">
+          {errors.map(e => (
+            <div key={e.id} className="bg-[#111] border border-[#2a2a2a] rounded-lg p-3">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-xs text-[#555]">{new Date((e.createdAt ?? 0) * 1000).toLocaleString()}</span>
+                <span className="text-xs text-violet-400">{e.route}</span>
+              </div>
+              <p className="text-xs text-red-300 leading-relaxed font-mono break-all">
+                {e.errorDetail ?? e.errorMessage}
+              </p>
+            </div>
+          ))}
+        </div>
+      )}
+    </section>
   )
 }

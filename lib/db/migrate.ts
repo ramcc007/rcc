@@ -142,6 +142,17 @@ CREATE TABLE IF NOT EXISTS rate_limit_log (
 );
 
 CREATE INDEX IF NOT EXISTS idx_rate_limit_key_ts ON rate_limit_log (key, ts);
+
+CREATE TABLE IF NOT EXISTS api_errors (
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  user_id TEXT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  route TEXT NOT NULL,
+  error_message TEXT NOT NULL,
+  error_detail TEXT,
+  created_at INTEGER DEFAULT (unixepoch())
+);
+
+CREATE INDEX IF NOT EXISTS idx_api_errors_user ON api_errors (user_id, created_at DESC);
 `
 
 // Incremental column additions — safe to re-run; errors are ignored

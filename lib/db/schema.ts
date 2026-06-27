@@ -129,6 +129,15 @@ export const rateLimitLog = sqliteTable('rate_limit_log', {
   ts: integer('ts').notNull(),
 })
 
+export const apiErrors = sqliteTable('api_errors', {
+  id: integer('id').primaryKey({ autoIncrement: true }),
+  userId: text('user_id').notNull().references(() => users.id, { onDelete: 'cascade' }),
+  route: text('route').notNull(),
+  errorMessage: text('error_message').notNull(),
+  errorDetail: text('error_detail'),
+  createdAt: integer('created_at', { mode: 'timestamp' }).default(sql`(unixepoch())`),
+})
+
 export const videoExports = sqliteTable('video_exports', {
   id: text('id').primaryKey(),
   videoJobId: text('video_job_id').notNull().references(() => videoJobs.id, { onDelete: 'cascade' }),

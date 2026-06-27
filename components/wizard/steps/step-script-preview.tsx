@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { useWizardStore } from '@/lib/store/wizard-store'
 import { useMutation } from '@tanstack/react-query'
 import type { ScriptContent, SceneBreakdown } from '@/lib/types'
-import { Sparkles, RefreshCw, Copy, Check, AlertCircle } from 'lucide-react'
+import { Sparkles, RefreshCw, Copy, Check, AlertCircle, ClipboardCopy } from 'lucide-react'
 
 function ScriptSectionCard({
   label,
@@ -127,13 +127,22 @@ export function StepScriptPreview() {
         <div className="w-12 h-12 bg-red-500/20 rounded-2xl flex items-center justify-center">
           <AlertCircle className="w-6 h-6 text-red-400" />
         </div>
-        <div className="text-center space-y-2">
+        <div className="text-center space-y-2 w-full">
           <p className="text-white font-semibold">Script generation failed</p>
-          <p className="text-[#a3a3a3] text-sm">{errMsg}</p>
+          <div className="relative bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg px-3 py-2 text-left">
+            <p className="text-[#a3a3a3] text-xs font-mono break-all pr-8">{errMsg}</p>
+            <button
+              onClick={() => { navigator.clipboard.writeText(errMsg) }}
+              className="absolute top-2 right-2 text-[#555] hover:text-[#a3a3a3]"
+              title="Copy error"
+            >
+              <ClipboardCopy className="w-3.5 h-3.5" />
+            </button>
+          </div>
           {isQuota && (
             <p className="text-xs text-yellow-400 bg-yellow-900/20 border border-yellow-900/30 rounded-lg px-3 py-2">
-              Your Gemini free tier quota is full. Wait ~1 minute and try again, or check{' '}
-              <a href="https://ai.dev/rate-limit" target="_blank" rel="noreferrer" className="underline">ai.dev/rate-limit</a>.
+              Quota limit: 0 means your key is from a billing-enabled Google project.
+              Create a new key at <span className="font-semibold">aistudio.google.com</span> using a Google account with no Cloud billing.
             </p>
           )}
           {isKey && (
@@ -141,6 +150,9 @@ export function StepScriptPreview() {
               Update Gemini API key in Settings →
             </a>
           )}
+          <a href="/settings" className="text-xs text-[#555] hover:text-[#a3a3a3] underline inline-block">
+            View full error log in Settings →
+          </a>
         </div>
         <button
           onClick={() => generateMutation.mutate()}
