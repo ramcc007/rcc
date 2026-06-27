@@ -2,8 +2,8 @@ import { getGeminiClient } from './client'
 import { buildScriptPrompt } from './prompts'
 import type { ScriptGenerationParams, ScriptContent } from '@/lib/types'
 
-// Only models available in the @google/genai v1beta endpoint
-const MODELS = ['gemini-2.0-flash', 'gemini-2.0-flash-lite', 'gemini-2.5-flash-lite-preview-06-17']
+// Models confirmed available in @google/genai v1beta (no deprecated 1.5 series)
+const MODELS = ['gemini-2.5-flash', 'gemini-2.0-flash', 'gemini-2.0-flash-lite']
 
 function parseScriptJson(raw: string): ScriptContent {
   const cleaned = raw
@@ -63,10 +63,13 @@ export async function generateScript(
   // Translate common errors to friendly messages
   const msg = lastError instanceof Error ? lastError.message : String(lastError)
   if (isQuotaError(lastError)) {
-    throw new Error('Gemini API quota exceeded. Wait a minute and try again, or check your usage at ai.dev/rate-limit.')
+    throw new Error('Gemini API quota exceeded. Your API key may be linked to a billing-enabled project — create a fresh key on a new project at aistudio.google.com.')
   }
   if (msg.includes('API_KEY_INVALID') || msg.includes('401')) {
     throw new Error('Invalid Gemini API key. Please update it in Settings.')
+  }
+  if (msg.includes('404') || msg.includes('NOT_FOUND')) {
+    throw new Error('Gemini model not available for your API key. Make sure your key is from aistudio.google.com (not Google Cloud Console).')
   }
   throw new Error(`Script generation failed: ${msg}`)
 }
