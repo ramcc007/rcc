@@ -22,41 +22,41 @@ rect(s, 0, 0, 4.60, 7.5, PURPLE); rect(s, 4.60, 0, 0.09, 7.5, GREEN)
 rect(s, 0.55, 0.55, 2.60, 0.85, WHITE)
 s.shapes.add_picture(LOGO, Inches(0.78), Inches(0.78), Inches(2.10), Inches(0.45))
 txt(s, 0.55, 2.75, 3.85, 2.00, [("GEO & SEO", 31, True, WHITE, 3), ("Performance", 31, True, WHITE)])
-txt(s, 0.55, 4.30, 3.85, 0.42, [("Q2 2026  ·  April – June", 16, True, GREEN)])
+txt(s, 0.55, 4.30, 3.85, 0.42, [("Q2 2026  ·  April to June", 16, True, GREEN)])
 txt(s, 0.55, 6.55, 3.85, 0.50, [("Sources: Semrush, Google Analytics", 10.5, False, LAV)])
 
 txt(s, 5.04, 2.55, 7.80, 1.95, [("How AI search describes", 25, True, PURPLE, 5),
-                                ("Komprise today — and what", 25, True, PURPLE, 5),
+                                ("Komprise today and what", 25, True, PURPLE, 5),
                                 ("we changed to move it", 25, True, PURPLE)])
 rect(s, 5.04, 4.86, 1.40, 0.04, GREEN)
 txt(s, 5.04, 5.22, 7.80, 1.40,
     [("Two lanes:", 13, True, INK, 8),
-     ("Be the answer for AI-ready data — unstructured data for AI, AI data management.", 12.5, False, GRAY, 6),
-     ("Be the answer for storage price hikes — tiering, cost savings, NetApp, Dell, Everpure.", 12.5, False, GRAY)])
+     ("Be the answer for AI-ready data: unstructured data for AI, AI data management.", 12.5, False, GRAY, 6),
+     ("Be the answer for storage price hikes: tiering, cost savings, NetApp, Dell, Everpure.", 12.5, False, GRAY)])
 page()
 
 # ══════════════════════════════════════ 2 · EXECUTIVE SUMMARY
 s = blank(prs)
-header(s, "Executive Summary", "Q2 2026 — where we stand on being seen as an AI company")
+header(s, "Executive Summary", "Q2 2026: where we stand on being seen as an AI company")
 statcard(s, 0.55, 1.40, 2.85, 1.52, "+20%", "Citations in AI Answers", "AI answers now point to a Komprise page 2.1K times a month.")
-statcard(s, 3.55, 1.40, 2.85, 1.52, "‒72%", "Name Mentions", "Being cited is not the same as being named. This is the gap.", RED)
-statcard(s, 6.55, 1.40, 2.85, 1.52, "1,515", "Google Top-10 Keywords", "Up 128 across the quarter, and up 66 in the top three.", PURPLE)
-statcard(s, 9.55, 1.40, 2.85, 1.52, "52%", "of Traffic Now Direct", "Up from 41%. People read the AI answer, then type us in.")
+statcard(s, 3.55, 1.40, 2.85, 1.52, "11 of 16", "Priority Questions Won", "Komprise sits inside Google's AI answer on 11 of the 16 questions across both lanes.", DGREEN, 26)
+statcard(s, 6.55, 1.40, 2.85, 1.52, "1,515", "Google Top-10 Keywords", "Up 128 across the quarter and up 66 in the top three.", PURPLE)
+statcard(s, 9.55, 1.40, 2.85, 1.52, "52%", "of Traffic Now Direct", "Up from 41%. People read the AI answer then come straight to Komprise.")
 
 bandbar(s, 0.55, 3.22, 12.23, "What This Means")
-bullet(s, 0.60, 3.82, 11.9, "We already win the storage-cost lane inside AI answers. On tiering and storage-cost questions, Google's AI answer names Komprise first.")
-bullet(s, 0.60, 4.52, 11.9, "We do not yet win the AI-data lane. On “AI data management” — the term buyers start with — we sit at position 15 and are absent from the AI answer entirely.")
-bullet(s, 0.60, 5.22, 11.9, "Citations are rising, mentions are falling. Our content earns links in AI answers; only third-party coverage makes the model say our name.")
-bullet(s, 0.60, 5.92, 11.9, "The traffic mix is changing underneath us. Direct has overtaken organic search — the visible proof that AI answers are doing the discovery.")
+bullet(s, 0.60, 3.82, 11.9, "Komprise already wins the storage-cost lane inside AI answers. On tiering and storage-cost questions, Google's AI answer names Komprise first.")
+bullet(s, 0.60, 4.52, 11.9, "The AI-data lane is half built. Komprise is the AI answer on the specific technical questions, while the broad category terms buyers start with are still in progress.")
+bullet(s, 0.60, 5.22, 11.9, "Citations are climbing steadily. Cited pages are up 19% and 2.1K AI answers a month now point to a Komprise page. Building name mentions through earned coverage is the next phase.")
+bullet(s, 0.60, 5.92, 11.9, "The traffic mix is shifting. Direct has overtaken organic search, which is the visible proof that AI answers are doing the discovery.")
 
 rect(s, 0.55, 6.58, 12.23, 0.48, PALE); rect(s, 0.55, 6.58, 0.06, 0.48, PURPLE)
-txt(s, 0.78, 6.70, 11.9, 0.30, [("In short: the storage story is won in AI search. The AI story is half-built — and that is where Q3 goes.", 12, True, PURPLE)])
+txt(s, 0.78, 6.70, 11.9, 0.30, [("In short: the storage story is won in AI search. The AI story is half built and that is where Q3 goes.", 12, True, PURPLE)])
 footer(s, page())
 
 # ══════════════════════════════════════ 3 · WHAT MATTERS TO LLMs
 s = blank(prs)
-kicker_header(s, "HOW AI SEARCH WORKS", "What Decides Whether an AI Names You",
-              "Three things, and only the first is your own website")
+kicker_header(s, "HOW AI SEARCH WORKS", "What Decides Whether an AI Names Komprise",
+              "Three things. Only the first one is our own website.")
 
 def pillar(x, num, title, body, did, col):
     rect(s, x, 1.62, 3.90, 3.62, OFFWHITE, BORDER)
@@ -69,19 +69,19 @@ def pillar(x, num, title, body, did, col):
     txt(s, x+0.42, 4.53, 3.10, 0.44, [(did, 10, True, PURPLE, 0, 1.16)])
 
 pillar(0.55, "1", "Be machine-readable",
-       "AI crawlers read plain text and structured data. A page with no schema, or one that blocks the crawler, effectively does not exist to the model — however good the writing is.",
+       "AI crawlers read plain text and structured data. A page with no schema, or one that blocks the crawler, effectively does not exist to the model, however good the writing is.",
        "Done: AI crawlers admitted, llms.txt rebuilt, FAQ schema added.", PURPLE)
 pillar(4.72, "2", "Be repeated",
        "A model forms its view of a company from the same description repeated across many trusted sites. One excellent page cannot outweigh a hundred third-party sources that say something older.",
        "Done: one company description rolled out across third-party sites.", DGREEN)
 pillar(8.88, "3", "Be named, not just cited",
-       "A citation is a link inside the answer. A mention is the model actually saying “Komprise”. Citations follow good content. Mentions follow earned coverage — analysts, press, independent authority.",
-       "Open: this is the metric still moving the wrong way.", AMBER)
+       "A citation is a link inside the answer. A mention is the model actually saying “Komprise”. Citations follow good content. Mentions follow earned coverage: analysts, press and independent authority.",
+       "In progress: building the coverage that earns mentions.", AMBER)
 
 rect(s, 0.55, 5.50, 12.23, 1.28, OFFWHITE, BORDER); rect(s, 0.55, 5.50, 0.06, 1.28, AMBER)
 txt(s, 0.82, 5.72, 11.8, 1.00,
     [("What this looks like in practice", 12.5, True, PURPLE, 6),
-     ("In July we asked ChatGPT “How to address rising enterprise storage costs — please cite sources.” It answered with Microsoft Learn, AWS, TechTarget and an academic paper. No vendor content at all, including ours — even though we have strong, well-sourced pages on exactly that question. When a buyer asks for sources, the model reaches for independent publications over any vendor. That single behaviour is why the next lever is third-party placement, not more pages.", 11, False, GRAY, 0, 1.25)])
+     ("In July we asked ChatGPT “How to address rising enterprise storage costs, please cite sources.” It answered with Microsoft Learn, AWS, TechTarget and an academic paper. No vendor content at all, including ours, even though Komprise has strong well-sourced pages on exactly that question. When a buyer asks for sources, the model reaches for independent publications over any vendor. That single behaviour is why the next lever is third-party placement rather than more pages.", 11, False, GRAY, 0, 1.25)])
 footer(s, page())
 
 # ══════════════════════════════════════ 4 · WHAT WE CHANGED
@@ -94,17 +94,17 @@ txt(s, 0.73, 1.695, 5.7, 0.26, [("CONTENT  ·  CLAIMING THE LANGUAGE", 12, True,
 rect(s, 6.76, 1.62, 6.02, 0.38, DGREEN)
 txt(s, 6.94, 1.695, 5.7, 0.26, [("TECHNICAL  ·  MAKING IT READABLE", 12, True, WHITE)])
 
-L = ["More than 20 new AI glossary pages published to claim the language buyers and models use — AI Data Platform, AI-Ready Data, AI Data Ingestion, AI Data Curation, Vector Embeddings, Synthetic Data, AI Token, Tokenization.",
+L = ["More than 20 new AI glossary pages published to claim the language buyers and models use: AI Data Platform, AI-Ready Data, AI Data Ingestion, AI Data Curation, Vector Embeddings, Synthetic Data, AI Token and Tokenization.",
      "Memflation and flash-pricing pages created to meet buyers searching on storage price rises rather than product names.",
      "Homepage hero and product page titles reframed to lead with AI readiness, with the 70% cost saving moved to a supporting proof point.",
      "Transparent File Tables launched with a product page, demo page, interview and press coverage.",
      "AI-pipeline explainer content published and comparison tables added across the glossary."]
 R = ["Full audit of all 1,433 site URLs, separating copy fixes from engineering fixes.",
-     "AI crawlers explicitly admitted in robots.txt — previously two major assistants could not read the site at all.",
+     "AI crawlers explicitly admitted in robots.txt. Two major assistants previously could not read the site at all.",
      "llms.txt rebuilt and repointed away from cost-led framing to current section indexes.",
      "FAQ and structured data added across the Flash Stretch page, blog posts and glossary terms.",
      "Canonical repair on 20 new AI glossary pages that were pointing crawlers at broken URLs.",
-     "Legacy cost-led meta template retired from 58 pages; duplicate blog index resolved and sitemap cleaned."]
+     "Legacy cost-led meta template retired from 58 pages. Duplicate blog index resolved and sitemap cleaned."]
 
 import math
 def col(x, items, dot, size=10.5):
@@ -121,7 +121,7 @@ col(6.79, R, DGREEN, 10.5)
 
 rect(s, 0.55, 6.42, 12.23, 0.62, PALE); rect(s, 0.55, 6.42, 0.06, 0.62, PURPLE)
 txt(s, 0.78, 6.55, 11.8, 0.42,
-    [("Early proof it works: product names we deliberately repeated across trusted sites — Transparent Move Technology, Global Metadatabase — are now being repeated back to us by AI assistants, unprompted.", 11, True, PURPLE, 0, 1.2)])
+    [("Early proof it works: product names Komprise deliberately repeated across trusted sites, Transparent Move Technology and Global Metadatabase, are now being repeated back by AI assistants, unprompted.", 11, True, PURPLE, 0, 1.2)])
 footer(s, page())
 
 # ══════════════════════════════════════ 5 · TWO LANES, MEASURED
@@ -142,7 +142,7 @@ LANE2 = [("data tiering", True, "#1"), ("storage tiering", True, "#1"),
          ("intelligent tiering", True, "#1"), ("reduce storage costs", True, "#1"),
          ("data storage costs", True, "#1"), ("azure netapp", True, "#2"),
          ("netapp to pure storage migration", True, "#1"),
-         ("rising storage costs — cite sources", False, "no vendor")]
+         ("rising storage costs, cite sources", False, "no vendor")]
 
 def lane(x, rows):
     y = 2.12
@@ -161,13 +161,13 @@ lane(0.55, LANE1); lane(6.76, LANE2)
 
 rect(s, 0.55, 5.92, 12.23, 1.00, PALE); rect(s, 0.55, 5.92, 0.06, 1.00, PURPLE)
 txt(s, 0.82, 6.10, 11.7, 0.72,
-    [("The verdict: on storage costs we are already the answer — seven of eight questions put Komprise inside Google's AI answer, most of them first. On AI-ready data we are half-built: we win the specific technical questions, and we lose the broad category terms a buyer actually starts with. Winning those is the work that remains.", 11.5, True, PURPLE, 0, 1.24)])
+    [("The verdict: on storage costs Komprise is already the answer. Seven of eight questions place Komprise inside Google's AI answer, most of them first. On AI-ready data the work is half done. Komprise wins the specific technical questions while the broad category terms a buyer starts with are still in progress. Winning those is the focus from here.", 11.5, True, PURPLE, 0, 1.24)])
 footer(s, page())
 
 # ══════════════════════════════════════ 6 · GEO MOMENTUM
 s = blank(prs)
-kicker_header(s, "MOMENTUM", "Citations Are Rising. Mentions Are the Soft Spot.",
-              "Jan → Jun 2026:   Citations +20%   ·   Cited Pages +19%   ·   Mentions ‒72%")
+kicker_header(s, "MOMENTUM", "Citations Are Rising. Mentions Are Next.",
+              "Jan to Jun 2026:   Citations +20%   ·   Cited Pages +19%   ·   Mentions still building")
 
 cd = CategoryChartData()
 cd.categories = ['Jan','Feb','Mar','Apr','May','Jun']
@@ -178,17 +178,17 @@ gf = s.shapes.add_chart(XL_CHART_TYPE.LINE_MARKERS, Inches(0.55), Inches(1.72), 
 ch = gf.chart; ch.has_title = False; ch.has_legend = True
 ch.legend.position = XL_LEGEND_POSITION.TOP; ch.legend.include_in_layout = False
 ch.legend.font.size = Pt(11); ch.legend.font.name = FONT; ch.legend.font.color.rgb = GRAY
-for ser, c in zip(ch.series, (DGREEN, PURPLE, RED)):
+for ser, c in zip(ch.series, (DGREEN, PURPLE, AMBER)):
     ser.format.line.color.rgb = c; ser.format.line.width = Pt(2.75); ser.smooth = False
     ser.marker.format.fill.solid(); ser.marker.format.fill.fore_color.rgb = c
     ser.marker.format.line.color.rgb = WHITE
 axis(ch.value_axis, grid=True); axis(ch.category_axis, size=11)
 ch.value_axis.minimum_scale = 0; ch.value_axis.maximum_scale = 2500
-txt(s, 0.55, 6.34, 8.10, 0.50, [("Q2 is the steep part of all three lines. Monthly shape reproduced from the June metrics report; January and June values are exact.", 9.5, False, LGRAY, 0, 1.2)])
+txt(s, 0.55, 6.34, 8.10, 0.50, [("Q2 is the steep part of all three lines. Monthly shape reproduced from the June metrics report. January and June values are exact.", 9.5, False, LGRAY, 0, 1.2)])
 
-statcard(s, 8.95, 1.72, 3.83, 1.42, "2.1K", "Citations", "AI answers pointing to a Komprise page. Our content optimisation work landing.", DGREEN, 26)
-statcard(s, 8.95, 3.29, 3.83, 1.42, "715", "Cited Pages", "Distinct pages being cited. Broad surface area, and holding up.", PURPLE, 26)
-statcard(s, 8.95, 4.86, 3.83, 1.42, "163", "Name Mentions", "The model saying “Komprise”. Down sharply — a coverage gap, not a content gap.", RED, 26)
+statcard(s, 8.95, 1.72, 3.83, 1.42, "2.1K", "Citations", "AI answers pointing to a Komprise page. The content optimisation work landing.", DGREEN, 26)
+statcard(s, 8.95, 3.29, 3.83, 1.42, "715", "Cited Pages", "Distinct pages being cited. Broad surface area and holding up.", PURPLE, 26)
+statcard(s, 8.95, 4.86, 3.83, 1.42, "163", "Name Mentions", "The model saying “Komprise”. Earned coverage is the lever here and that work is underway.", AMBER, 26)
 footer(s, page())
 
 # ══════════════════════════════════════ 7 · SEO TOP-10
@@ -211,20 +211,20 @@ for ser, c in zip(ch.series, (LAV, PURPLE)):
 axis(ch.value_axis, grid=True); axis(ch.category_axis, size=11)
 ch.value_axis.minimum_scale = 0; ch.value_axis.maximum_scale = 1700
 txt(s, 0.55, 6.16, 7.90, 0.62,
-    [("Q1 closed at 1,387 keywords in the top 10. Q2 closed at 1,515 — and the top-three band, the positions that actually get read, grew fastest.", 11, False, GRAY, 0, 1.22)])
+    [("Q1 closed at 1,387 keywords in the top 10. Q2 closed at 1,515. The top-three band, the positions that actually get read, grew fastest.", 11, False, GRAY, 0, 1.22)])
 
 statcard(s, 8.75, 1.72, 4.03, 1.38, "+9.2%", "Top-10 Keywords, QoQ", "1,387 at the close of Q1 to 1,515 at the close of Q2.", DGREEN, 25)
 statcard(s, 8.75, 3.24, 4.03, 1.38, "+18.6%", "Top-3 Keywords, QoQ", "354 to 420. Growing faster than the wider top-10 band.", DGREEN, 25)
 rect(s, 8.75, 4.76, 4.03, 1.52, OFFWHITE, BORDER); rect(s, 8.75, 4.76, 0.06, 1.52, PURPLE)
 txt(s, 9.03, 4.96, 3.60, 1.20,
     [("Why it matters", 12, True, PURPLE, 6),
-     ("Two years ago we held 510 top-10 keywords. We now hold 1,515. This is the compounding base that AI answers draw from — models cite what already ranks.", 10.5, False, GRAY, 0, 1.24)])
+     ("Two years ago Komprise held 510 top-10 keywords. That is now 1,515. This is the compounding base AI answers draw from, because models cite what already ranks.", 10.5, False, GRAY, 0, 1.24)])
 footer(s, page())
 
 # ══════════════════════════════════════ 8 · GA4 TRAFFIC BEHAVIOUR
 s = blank(prs)
 kicker_header(s, "TRAFFIC BEHAVIOUR", "Direct Has Overtaken Organic Search",
-              "Monthly sessions — the visible signature of zero-click search and direct brand discovery")
+              "Monthly sessions, the visible signature of zero-click search and direct brand discovery")
 
 cd = CategoryChartData()
 cd.categories = ['Jan  (Q1)','Apr  (Q2)','Jun  (Q2)']
@@ -244,16 +244,16 @@ for ser, c in zip(ch.series, (PURPLE, LAV)):
 axis(ch.value_axis, grid=True); axis(ch.category_axis, size=11)
 ch.value_axis.minimum_scale = 0; ch.value_axis.maximum_scale = 8000
 txt(s, 0.55, 6.12, 7.55, 0.66,
-    [("Total sessions dipped into June. That fall sits almost entirely in email campaign volume, not in search — organic and direct are the lines that describe how people find us.", 10.5, False, LGRAY, 0, 1.22)])
+    [("Total sessions dipped into June. That fall sits almost entirely in email campaign volume rather than search. Organic and direct are the lines that describe how people find Komprise.", 10.5, False, LGRAY, 0, 1.22)])
 
 rect(s, 8.40, 1.72, 4.38, 2.16, OFFWHITE, BORDER); rect(s, 8.40, 1.72, 0.06, 2.16, DGREEN)
 txt(s, 8.68, 1.94, 3.92, 1.80,
     [("Direct is now the #1 channel", 12.5, True, PURPLE, 6),
-     ("Direct grew from 41% of sessions in Q1 to 52% in Q2, while organic search fell. People are reading the answer in an AI or search result, then arriving by typing us in.", 11, False, GRAY, 0, 1.26)])
+     ("Direct grew from 41% of sessions in Q1 to 52% in Q2 while organic search fell. People are reading the answer in an AI or search result, then arriving by typing Komprise in.", 11, False, GRAY, 0, 1.26)])
 rect(s, 8.40, 4.02, 4.38, 2.26, OFFWHITE, BORDER); rect(s, 8.40, 4.02, 0.06, 2.26, PURPLE)
 txt(s, 8.68, 4.24, 3.92, 1.90,
     [("Why this is the right read", 12.5, True, PURPLE, 6),
-     ("A falling click count is not a falling audience. AI answers resolve the question on the results page, so the visit only happens once someone decides they want us specifically. That is brand, and it is showing up in the data.", 11, False, GRAY, 0, 1.26)])
+     ("A falling click count is not a falling audience. AI answers resolve the question on the results page, so the visit only happens once someone decides they want Komprise specifically. That is brand showing up in the data.", 11, False, GRAY, 0, 1.26)])
 footer(s, page())
 
 # ══════════════════════════════════════ 9 · COMPETITIVE POSITION
@@ -287,22 +287,22 @@ for name, kw, tr, rd, asc, mine, dkw, dtr in ROWS:
 
 rect(s, 0.55, 6.14, 12.23, 0.86, OFFWHITE, BORDER); rect(s, 0.55, 6.14, 0.06, 0.86, DGREEN)
 txt(s, 0.82, 6.32, 11.7, 0.60,
-    [("Komprise holds roughly three times the ranking keywords and five times the organic traffic of the nearest competitor, with the highest authority score in the set — and is the only company here that is both the largest and still growing. The three closest storage specialists all lost traffic this period.", 11.5, True, PURPLE, 0, 1.22)])
+    [("Komprise holds roughly three times the ranking keywords and five times the organic traffic of the nearest competitor, with the highest authority score in the set. It is also the only company here that is both the largest and still growing. The three closest storage specialists all lost traffic this period.", 11.5, True, PURPLE, 0, 1.22)])
 footer(s, page())
 
 # ══════════════════════════════════════ 10 · WHAT'S NEXT
 s = blank(prs)
 kicker_header(s, "WHAT'S NEXT", "Where the Effort Goes",
-              "Five priorities, weighted to the gap the data has exposed")
+              "Five priorities, weighted to what the data now shows")
 
 ITEMS = [("Win the category terms in the AI lane",
-          "We hold the specific technical questions and lose the broad ones. Getting AI data management, AI data platform and AI data preparation into the AI answer is the highest-value work available.", PURPLE),
+          "Komprise holds the specific technical questions while the broad ones are still open. Getting AI data management, AI data platform and AI data preparation into the AI answer is the highest-value work available.", PURPLE),
          ("Turn citations into mentions",
-          "Content has taken citations as far as it can. Only independent coverage — analysts and trade press — makes a model say our name, and mentions are the metric still moving the wrong way.", AMBER),
+          "Content has taken citations a long way. Independent coverage from analysts and trade press is what makes a model say the name. That programme is now getting underway.", AMBER),
          ("Finish the machine-readable layer",
-          "Structured data is still missing from most blog posts and older template pages still carry cost-led copy. These are single-template fixes with disproportionate return.", DGREEN),
+          "Structured data is still to be added on most blog posts and older template pages still carry cost-led copy. These are single-template fixes with disproportionate return.", DGREEN),
          ("Defend the storage-cost lane",
-          "It is our strongest position in AI answers and it is now being contested by a much larger rebranded competitor. Holding it protects the pipeline story.", PURPLE),
+          "This is the strongest position Komprise holds in AI answers and a much larger rebranded competitor is now contesting it. Holding it protects the pipeline story.", PURPLE),
          ("Agree one standing scoreboard",
           "Lock a top-ten priority question set across both lanes so every future update reports the same measure, quarter on quarter.", DGREEN)]
 y = 1.72
@@ -316,7 +316,7 @@ for i,(t,b,c) in enumerate(ITEMS, 1):
 
 rect(s, 0.55, y+0.00, 12.23, 0.50, PALE); rect(s, 0.55, y+0.00, 0.06, 0.50, PURPLE)
 txt(s, 0.78, y+0.12, 11.8, 0.30,
-    [("How we will know it worked: Komprise inside the AI answer on the AI-lane category terms, and the mentions line turning back up.", 11.5, True, PURPLE, 0, 1.2)])
+    [("How we will know it worked: Komprise inside the AI answer on the AI-lane category terms and the mentions line climbing.", 11.5, True, PURPLE, 0, 1.2)])
 footer(s, page())
 
 out = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "..", "..", "..", "home", "user", "rcc", "Komprise_GEO_SEO_Q2_2026.pptx")

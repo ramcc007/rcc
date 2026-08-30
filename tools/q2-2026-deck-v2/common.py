@@ -22,7 +22,7 @@ BORDER   = RGBColor(0xE3, 0xE0, 0xE6)
 FONT = "Open Sans"
 
 LOGO = os.path.join(os.path.dirname(os.path.abspath(__file__)), "komprise-logo.png")
-FOOTER = "Komprise  —  GEO & SEO Performance, Q2 2026"
+FOOTER = "Komprise  ·  GEO & SEO Performance, Q2 2026"
 
 def new_deck():
     p = Presentation()

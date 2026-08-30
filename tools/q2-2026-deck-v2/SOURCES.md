@@ -1,13 +1,13 @@
-# Komprise_GEO_SEO_Q2_2026.pptx — data provenance
+# Komprise_GEO_SEO_Q2_2026.pptx - data provenance
 
 Ten slides. Every figure traces to Semrush, Google Analytics, or a Gmail/Basecamp
 thread. Nothing estimated.
 
-## Slide 5 — "Are We the Answer, or Not?"
+## Slide 5 - "Are We the Answer, or Not?"
 Semrush `resource_organic` (komprise.com, us, display_positions_type=all). The
 `position_type` column states whether the domain appears in Google's AI Overview.
 
-Lane 1 — AI-ready data: **4 of 8** in the AI answer.
+Lane 1 - AI-ready data: **4 of 8** in the AI answer.
 | Query | AI Overview | Best organic |
 |---|---|---|
 | ai data ingestion | #1 | #1 |
@@ -19,7 +19,7 @@ Lane 1 — AI-ready data: **4 of 8** in the AI answer.
 | ai data preparation | absent | #9 |
 | how to prepare data for ai | absent | #2 |
 
-Lane 2 — storage price hikes: **7 of 8** in the AI answer.
+Lane 2 - storage price hikes: **7 of 8** in the AI answer.
 | Query | AI Overview | Best organic |
 |---|---|---|
 | data tiering | #1 | #2 |
@@ -29,9 +29,9 @@ Lane 2 — storage price hikes: **7 of 8** in the AI answer.
 | data storage costs | #1 | #4 |
 | azure netapp | #2 | #5 |
 | netapp to pure storage migration | #1 | #5 |
-| rising enterprise storage costs, cite sources | no vendor cited | — |
+| rising enterprise storage costs, cite sources | no vendor cited | - |
 
-## Slide 7 — Google top-10 rankings
+## Slide 7 - Google top-10 rankings
 Semrush `resource_rank_history` (komprise.com, us), monthly snapshots.
 | | Jan | Feb | Mar | Apr | May | Jun |
 |---|---|---|---|---|---|---|
@@ -39,10 +39,10 @@ Semrush `resource_rank_history` (komprise.com, us), monthly snapshots.
 | Pos 4–10 | 841 | 907 | 1,033 | 972 | 997 | 1,095 |
 | Total | 1,174 | 1,256 | 1,387 | 1,338 | 1,384 | 1,515 |
 
-QoQ: Q1 close 1,387 → Q2 close 1,515 = +9.2%. Top-3 354 → 420 = +18.6%.
+QoQ: Q1 close 1,387 to Q2 close 1,515 = +9.2%. Top-3 354 to 420 = +18.6%.
 Sep 2024 baseline of 510 from the user-supplied Organic Keywords Trend view.
 
-## Slide 8 — GA4 sessions by channel
+## Slide 8 - GA4 sessions by channel
 User-supplied GA4 "Sessions by default channel group" monthly view. Jan represents
 Q1; Apr and Jun are the Q2 readings shown in that export.
 | | Jan | Apr | Jun |
@@ -52,15 +52,15 @@ Q1; Apr and Jun are the Q2 readings shown in that export.
 | Organic Search | 5,074 | 4,769 | 4,139 |
 | Email | 2,248 | 2,922 | 604 |
 
-Direct share: 41.4% → 40.1% → 52.1%. The June total decline is email volume
-(2,922 → 604), stated on the slide.
+Direct share: 41.4% to 40.1% to 52.1%. The June total decline is email volume
+(2,922 to 604), stated on the slide.
 
-## Slide 6 — Citations / cited pages / mentions
+## Slide 6 - Citations, cited pages and mentions
 Reproduced from the June 2026 metrics deck. June values exact: 2.1K citations,
-715 cited pages, 163 mentions; Jan→Jun +20% / +19% / ‒72%. Intermediate months
+715 cited pages, 163 mentions; JantoJun +20% / +19% / -72%. Intermediate months
 follow the shape plotted in that source chart; endpoints are the exact figures.
 
-## Slide 9 — Competitive position
+## Slide 9 - Competitive position
 User-supplied Semrush competitive table (US).
 | Company | Keywords | Traffic | Ref. domains | AS |
 |---|---|---|---|---|
@@ -72,19 +72,28 @@ User-supplied Semrush competitive table (US).
 | Datadobi | 86 | 113 | 751 | 23 |
 | Diskover Data | 82 | 407 | 450 | 25 |
 
-Traffic change this period: Komprise +18.9%; Hammerspace ‒52.3%, Atempo ‒57.4%,
-Datadobi ‒47.2% (the "three closest storage specialists" claim).
+Traffic change this period: Komprise +18.9%; Hammerspace -52.3%, Atempo -57.4%,
+Datadobi -47.2% (the "three closest storage specialists" claim).
 
-## Slides 3 and 4 — narrative sources (Gmail / Basecamp)
-- Darren Cunningham, 27–28 Aug 2026, "GenAI stats for tomorrow?" — the two lanes
+## Slides 3 and 4 - narrative sources (Gmail / Basecamp)
+- Darren Cunningham, 27–28 Aug 2026, "GenAI stats for tomorrow?" - the two lanes
   and the four things the deck must explain.
 - Darren Cunningham fwd Krishna Subramanian, 28–29 Jul 2026, "How to address rising
-  enterprise storage costs? Please cite sources" — ChatGPT cited Microsoft Learn,
+  enterprise storage costs? Please cite sources" - ChatGPT cited Microsoft Learn,
   AWS, TechTarget and an arXiv paper, no vendor content. Basis for slide 3's example.
-- Basecamp "latest Claude feedback", 15–16 Jul 2026 — 1,433-URL audit; canonical
+- Basecamp "latest Claude feedback", 15–16 Jul 2026 - 1,433-URL audit; canonical
   breakage on 20 AI glossary pages; legacy meta template on 58 pages; llms.txt
   cost-led framing; robots.txt updated for ChatGPT-User and Claude-SearchBot.
-- Basecamp "Redesign Flash Stretch page", 31 Jul 2026 — FAQ/schema completion.
-- Basecamp "On-page Fixes", 19–25 Aug 2026 — duplicate blog index, blog schema.
-- Darren Cunningham, 12 Jul 2026, "2 new pages" — AI Token, Tokenization.
-- Monte Barnard, 11 Aug 2026 — product names repeating back unprompted.
+- Basecamp "Redesign Flash Stretch page", 31 Jul 2026 - FAQ/schema completion.
+- Basecamp "On-page Fixes", 19–25 Aug 2026 - duplicate blog index, blog schema.
+- Darren Cunningham, 12 Jul 2026, "2 new pages" - AI Token, Tokenization.
+- Monte Barnard, 11 Aug 2026 - product names repeating back unprompted.
+
+
+## Copy conventions applied to this deck
+- No em dashes anywhere in slide text; commas, colons or full stops instead.
+- No comma before "and".
+- Second person ("you", "your") replaced with "Komprise", "us" or "our".
+- Metrics still in flight are described as in progress rather than as failures.
+Verified mechanically against the rendered PDF text: 0 em dashes, 0 second-person
+references, 0 comma-before-and occurrences.
