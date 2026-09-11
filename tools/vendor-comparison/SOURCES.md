@@ -4,15 +4,17 @@ One slide answering the board question relayed by Darren on 1 Sep 2026: how does
 Komprise compare against Cohesity, Commvault, NetApp and Everpure.
 
 ## Table - Semrush `resource_rank_history`, US database, snapshot 15 Aug 2026
-| Company | Ranking keywords | Organic traffic | Keywords in AI answers | Top 3 | Visits per keyword |
-|---|---|---|---|---|---|
-| Komprise | 6,139 | 25,126 | 5,464 | 548 | 4.09 |
-| Cohesity | 13,381 | 36,773 | 11,136 | 872 | 2.75 |
-| Everpure | 20,134 | 42,990 | 17,968 | 1,061 | 2.14 |
-| NetApp | 39,118 | 75,742 | 32,473 | 2,182 | 1.94 |
-| Commvault | 18,472 | 33,189 | 14,773 | 764 | 1.80 |
+| Company | Ranking keywords | Organic traffic | Keywords in AI answers | Top 3 |
+|---|---|---|---|---|
+| Komprise | 6,139 | 25,126 | 5,464 | 548 |
+| NetApp | 39,118 | 75,742 | 32,473 | 2,182 |
+| Everpure | 20,134 | 42,990 | 17,968 | 1,061 |
+| Cohesity | 13,381 | 36,773 | 11,136 | 872 |
+| Commvault | 18,472 | 33,189 | 14,773 | 764 |
 
-Visits per keyword is derived: organic traffic divided by ranking keywords.
+Visits per keyword, quoted in the left read-out rather than as a column:
+Komprise 4.09, Cohesity 2.75, Everpure 2.14, NetApp 1.94, Commvault 1.80.
+Derived as organic traffic divided by ranking keywords.
 
 ## Authority score and referring domains - Semrush `backlinks_overview`
 Komprise 43 / 1,944. Cohesity 43 / 8,563. Commvault 47 / 10,108.
@@ -42,3 +44,20 @@ Not yet ranking or outside the AI answer:
 
 ## Open items this slide commits to
 Adding the five gap terms above to the position tracking campaign.
+
+
+## Pages indexed in Google - not included, and why
+Requested as a column but not added, because no source available here can fill it
+for all five vendors:
+
+- Google Search Console reports indexed page counts only to the verified owner of
+  a property, so it covers komprise.com and none of the competitors.
+- Semrush `resource_organic_unique` lists pages ranking in Google's top 100, which
+  is a different measure, and the API caps `display_limit` at 1000 with
+  `display_offset` required to be below it. Totals for the larger domains cannot
+  be counted.
+- Semrush `backlinks_pages` reports pages in Semrush's own backlink index, not
+  Google's index.
+
+The conventional fallback is a `site:` query per domain in Google. Those figures
+are rough estimates by Google's own description and would need labelling as such.
