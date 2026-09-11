@@ -148,3 +148,44 @@ Slide 5 was rebuilt on Google organic position only, in
 consistent between vendors. The AI Overview presence data stays out of the
 board deck until a manual check confirms it. The worksheet for that check is in
 `tools/manual-verification/`.
+
+---
+
+# Third check, 11 September 2026
+
+## Google is still unreachable
+
+Retried on three separate routes. All refused.
+
+| Route | Result |
+|---|---|
+| curl through the agent proxy | `CONNECT tunnel failed, response 403` |
+| Playwright with the bundled Chromium | `net::ERR_TUNNEL_CONNECTION_FAILED` |
+| WebFetch | `EGRESS_BLOCKED: Access to www.google.com is blocked by the network egress proxy` |
+
+No live Google check is possible from this environment. The manual worksheet in
+`tools/manual-verification/` remains the only way to confirm the AI Overview
+data.
+
+## Independent corroboration of the organic ordering
+
+A general web search index, separate from Semrush and separate from Google, was
+used to sanity check the three terms carrying the strongest claims on slide 5.
+Result ordering in that index is not Google's, so this confirms relative
+presence rather than exact position.
+
+**fabricpool.** Both komprise.com fabricpool pages appear in the top ten
+alongside several docs.netapp.com pages, including the ONTAP concept page.
+Consistent with the Semrush reading of NetApp first and Komprise close behind.
+Nothing here supports the original claim that NetApp was absent.
+
+**dell powerscale.** Dell's own product, support and blog pages fill most of
+the top ten. The komprise.com glossary page sits among them. Consistent with
+Dell first and Komprise close behind.
+
+**data tiering.** The komprise.com data tiering page ranks above
+netapp.com/data-services/tiering/. This independently corroborates the one
+clean win over a vendor found in the Semrush data.
+
+So the organic story on slide 5 holds up against a second source. The AI
+Overview story still has no independent confirmation and stays out of the deck.
