@@ -1,0 +1,33 @@
+keyword,position,position_type,url,crawl_date,on_slide5,verdict
+fabricpool,2,Organic,https://www.komprise.com/glossary_terms/netapp-fabricpool/,2026-08-12,yes,supported
+fabricpool,1,AI overview,https://www.komprise.com/glossary_terms/netapp-fabricpool/,2026-08-12,yes,supported
+fabricpool,9,Organic,https://www.komprise.com/glossary_terms/fabricpool/,2026-08-12,yes,supported
+dell powerscale,1,AI overview,https://www.komprise.com/glossary_terms/dell-powerscale/,2026-08-24,yes,supported
+dell powerscale,2,Organic,https://www.komprise.com/glossary_terms/dell-powerscale/,2026-08-24,yes,supported
+dell emc storage,1,AI overview,https://www.komprise.com/glossary_terms/emc/,2026-08-01,yes,supported
+dell emc storage,7,Organic,https://www.komprise.com/glossary_terms/emc/,2026-08-01,yes,supported
+isilon powerscale,1,AI overview,https://www.komprise.com/glossary_terms/dell-powerscale/,2026-07-20,yes,supported but oldest crawl
+netapp bluexp,12,Organic,https://www.komprise.com/glossary_terms/netapp-bluexp-data-management/,2026-08-31,yes,NOT SUPPORTED no AI overview row
+netapp bluexp,30,Organic,https://www.komprise.com/glossary_terms/bluexp/,2026-08-31,yes,NOT SUPPORTED no AI overview row
+netapp blue xp,1,AI overview,https://www.komprise.com/glossary_terms/bluexp/,2026-07-28,no,different keyword spaced variant
+cloudpool,13,Organic,https://www.komprise.com/glossary_terms/cloudpools/,2026-07-27,yes,supported organic only
+netapp tiering,,,,,yes,supported no ranking found
+netapp storage costs,,,,,yes,supported no ranking found
+dell tiering,,,,,no,no ranking found
+dell storage costs,,,,,no,no ranking found
+data tiering,1,AI overview,https://www.komprise.com/glossary_terms/data-tiering/,2026-08-29,yes,supported
+storage tiering,1,AI overview,https://www.komprise.com/glossary_terms/storage-tiering/,2026-08-11,yes,supported
+intelligent tiering,1,AI overview,https://www.komprise.com/glossary_terms/s3-intelligent-tiering/,2026-07-20,yes,supported but old crawl
+data storage costs,1,AI overview,https://www.komprise.com/glossary_terms/data-storage-costs/,2026-08-12,yes,supported
+reduce storage costs,2,Organic,https://www.komprise.com/glossary_terms/data-storage-costs/,2026-09-10,yes,NOT SUPPORTED no AI overview row
+azure netapp,2,AI overview,https://www.komprise.com/glossary_terms/azure-netapp-files/,2026-08-10,yes,supported at position 2
+netapp to pure storage migration cost and timeline,1,AI overview,https://www.komprise.com/resource/accelerate-nas-and-cloud-data-migrations-to-netapp-cvo-and-anf/,2026-08-19,yes,supported long tail phrasing only
+ai data ingestion,1,AI overview,https://www.komprise.com/glossary_terms/ai-data-ingestion/,2026-07-25,yes,supported
+ai data leakage,1,AI overview,https://www.komprise.com/glossary_terms/ai-data-leakage/,2026-08-22,yes,supported
+unstructured data management solutions,1,AI overview,,2026-08-11,yes,supported
+ai data curation,4,Organic,https://www.komprise.com/?post_type=glossary_terms&p=55987,2026-09-06,yes,NOT SUPPORTED no AI overview row
+ai data curation,49,Organic,https://www.komprise.com/glossary_terms/data-curation/,2026-09-06,yes,NOT SUPPORTED no AI overview row
+what is data curation,1,AI overview,,2026-08-24,no,different keyword
+ai data management,15,Organic,https://www.komprise.com/glossary_terms/data-management-for-ai/,2026-08-23,yes,supported
+ai data platform,10,Organic,https://www.komprise.com/glossary_terms/ai-data-platform/,2026-07-22,yes,supported
+ai data preparation,9,Organic,https://www.komprise.com/guides/ai-data-preparation-guide/,2026-07-23,yes,supported
