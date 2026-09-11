@@ -82,12 +82,18 @@ twelve months to 11 September 2026, roughly 4.6k per month, against Semrush's
 25,126 for August. Semrush is overstating actual clicks for this domain by
 around five times.
 
-The column is still sourced from Semrush for all five vendors, because Search
-Console data exists only for a property you own. Substituting measured clicks
-for Komprise while leaving competitors on modelled estimates would understate
-Komprise by roughly a factor of five and make the comparison meaningless. The
-column header reads "Est. Monthly Traffic" and the source line states that the
-figure is a model rather than measured clicks.
+Decision taken: the Komprise cell shows 4,600, the Search Console twelve-month
+average, marked with an asterisk. The other four stay on Semrush estimates,
+because Search Console data exists only for a property you own.
+
+The consequence is recorded here so it is not forgotten. Against Semrush figures
+throughout, Komprise sits at roughly a third of NetApp's traffic. As displayed,
+mixing measured clicks against modelled estimates, it reads as about six per
+cent. If the competitors were measured the same way their figures would likely
+fall by a similar multiple, so the column understates Komprise's relative
+position by roughly five times. The on-slide footnote states which figure is
+measured and which are modelled, and notes that estimates typically run several
+times higher.
 
 ### Open item for the Q2 board deck
 Komprise_GEO_SEO_Q2_2026.pptx uses the same Semrush series and describes it as

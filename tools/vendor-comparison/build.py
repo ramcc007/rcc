@@ -10,7 +10,7 @@ kicker_header(s, "COMPETITIVE POSITION",
 
 COLS = [0.75, 3.80, 5.55, 7.20, 8.95, 11.15]
 WID  = [2.95, 1.70, 1.60, 1.70, 2.15, 1.40]
-HDR  = ["Company", "Ranking Keywords", "Pages Indexed", "Est. Monthly Traffic",
+HDR  = ["Company", "Ranking Keywords", "Pages Indexed", "Monthly Traffic",
         "Keywords in AI Answers", "Authority"]
 
 rect(s, 0.55, 1.62, 12.23, 0.52, PURPLE)
@@ -18,7 +18,7 @@ for i, (h, x, w) in enumerate(zip(HDR, COLS, WID)):
     al = PP_ALIGN.LEFT if i == 0 else PP_ALIGN.CENTER
     txt(s, x, 1.72, w, 0.36, [(h, 9.5, True, WHITE, 0, 1.08)], align=al)
 
-ROWS = [("Komprise",        "6,139",  "1,610",   "25,126", "5,464",  "43", True),
+ROWS = [("Komprise",        "6,139",  "1,610",   "4,600 *", "5,464",  "43", True),
         ("NetApp",          "39,118", "621,000", "75,742", "32,473", "51", False),
         ("Everpure (Pure)", "20,134", "32,900",  "42,990", "17,968", "51", False),
         ("Cohesity",        "13,381", "310,000", "36,773", "11,136", "43", False),
@@ -40,27 +40,27 @@ for idx, (name, kw, pg, tr, aio, asc, mine) in enumerate(ROWS):
             align=PP_ALIGN.CENTER)
     y += 0.50
 
-txt(s, 0.61, 4.82, 12.1, 0.24,
-    [("Sources: Semrush, US database, 15 August 2026, and Google site: queries, September 2026. Traffic is a Semrush model rather than measured clicks, applied identically to all five vendors. Page counts are Google estimates and include subdomains.",
+txt(s, 0.61, 4.80, 12.1, 0.50,
+    [("* Komprise is measured clicks from Google Search Console, twelve-month average to September 2026. The other four are Semrush estimates, which model clicks from ranking position and typically run several times higher. Sources: Semrush 15 August 2026, Google Search Console, Google site: queries September 2026. Page counts are Google estimates and include subdomains.",
       9, False, LGRAY, 0, 1.2)])
 
-rect(s, 0.55, 5.18, 6.02, 1.44, OFFWHITE, BORDER); rect(s, 0.55, 5.18, 0.06, 1.44, DGREEN)
-txt(s, 0.83, 5.36, 5.55, 1.16,
+rect(s, 0.55, 5.38, 6.02, 1.26, OFFWHITE, BORDER); rect(s, 0.55, 5.38, 0.06, 1.26, DGREEN)
+txt(s, 0.83, 5.54, 5.55, 1.04,
     [("Smallest footprint, best conversion", 12.5, True, PURPLE, 5),
      ("Komprise ranks for 6,139 keywords from around 1,610 indexed pages. NetApp needs roughly "
-      "621,000 pages to rank for 39,118. Far more of what we publish is working, and our "
+      "621,000 pages to rank for 39,118. Far more of what we publish is working. Our "
       "authority matches Cohesity on a quarter of the referring domains.",
       10.5, False, GRAY, 0, 1.24)])
 
-rect(s, 6.76, 5.18, 6.02, 1.44, OFFWHITE, BORDER); rect(s, 6.76, 5.18, 0.06, 1.44, PURPLE)
-txt(s, 7.04, 5.36, 5.55, 1.16,
+rect(s, 6.76, 5.38, 6.02, 1.26, OFFWHITE, BORDER); rect(s, 6.76, 5.38, 0.06, 1.26, PURPLE)
+txt(s, 7.04, 5.54, 5.55, 1.04,
     [("On their own product terms, we are the answer", 12.5, True, PURPLE, 5),
      ("Google's AI answer for “fabricpool” names Komprise first. NetApp's own pages do not "
       "appear in it at all. The same holds for “dell powerscale”, “dell emc storage” and "
       "“netapp bluexp”.", 10.5, False, GRAY, 0, 1.24)])
 
-rect(s, 0.55, 6.72, 12.23, 0.40, PALE); rect(s, 0.55, 6.72, 0.06, 0.40, PURPLE)
-txt(s, 0.83, 6.81, 11.8, 0.26,
+rect(s, 0.55, 6.74, 12.23, 0.40, PALE); rect(s, 0.55, 6.74, 0.06, 0.40, PURPLE)
+txt(s, 0.83, 6.83, 11.8, 0.26,
     [("Worth watching: Everpure, Commvault and Cohesity all grew traffic faster than us since May. The category is in a land grab.",
       10.5, True, PURPLE)])
 
