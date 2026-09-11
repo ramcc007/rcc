@@ -61,3 +61,38 @@ for all five vendors:
 
 The conventional fallback is a `site:` query per domain in Google. Those figures
 are rough estimates by Google's own description and would need labelling as such.
+
+## Pages indexed - added September 2026
+Google `site:` result counts, captured from screenshots on 11 September 2026:
+komprise.com 1,610; netapp.com 621,000; cohesity.com 310,000;
+commvault.com 172,000; everpuredata.com 32,900.
+
+Google describes these as estimates, and they include subdomains. NetApp's
+results include docs., kb., careers. and xcp.; Cohesity includes api. and docs.;
+Commvault includes documentation. and benefits. Much of the competitor bulk is
+product documentation rather than marketing content. Both caveats are stated in
+the on-slide source line.
+
+## Traffic column - a modelled estimate, not measured clicks
+Semrush organic traffic is derived from ranking position, search volume and an
+assumed click-through rate. It is not measured click data.
+
+Google Search Console for komprise.com reports 55.3k total clicks over the
+twelve months to 11 September 2026, roughly 4.6k per month, against Semrush's
+25,126 for August. Semrush is overstating actual clicks for this domain by
+around five times.
+
+The column is still sourced from Semrush for all five vendors, because Search
+Console data exists only for a property you own. Substituting measured clicks
+for Komprise while leaving competitors on modelled estimates would understate
+Komprise by roughly a factor of five and make the comparison meaningless. The
+column header reads "Est. Monthly Traffic" and the source line states that the
+figure is a model rather than measured clicks.
+
+### Open item for the Q2 board deck
+Komprise_GEO_SEO_Q2_2026.pptx uses the same Semrush series and describes it as
+"Organic Traffic" and "monthly visits", quoting 16,602 rising to 21,883 and
+"+32%". Those absolute figures carry the same five times overstatement. The
+Search Console clicks line over April to June also looks flat to slightly down
+rather than up 32%, so the trend needs checking against Search Console before
+the figure is quoted again.
