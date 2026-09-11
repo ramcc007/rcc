@@ -82,3 +82,69 @@ keyword list daily from a fixed location and keeps history, rather than giving
 one crawl per keyword whenever the crawler happened to pass. Moving these terms
 into the tracked campaign is what turns this from a snapshot into something
 that can be shown to a board and defended when someone checks it by hand.
+
+---
+
+# Second correction, 11 September 2026, after a live check
+
+A screenshot of Google for "fabricpool" showed NetApp cited throughout with no
+Komprise anywhere. Two findings came out of chasing that down.
+
+## Google cannot be reached from this environment
+
+The agent proxy returns `403 to CONNECT` for `www.google.com:443`. Chromium and
+Playwright are installed here and launch fine, but every request to Google is
+refused at the network layer. So no live check is possible from here. Every
+number in this work stream came from the Semrush API, and that limit should
+have been stated before any of it went near a slide.
+
+## The screenshot was AI Mode, not AI Overview
+
+The "Ask anything" box, the query bubble, the scrolling source rail and the
+AI Mode tab identify Google's conversational AI Mode. That is a separate
+surface from the AI Overview block on the standard results page, and it is not
+what Semrush reports on. This is a real distinction, not a defence of the
+slide, because of the next finding.
+
+## The position on an AI Overview row is not a rank
+
+Pulling the same keyword for the vendors settles it. For "fabricpool", from the
+same 12 August crawl as the Komprise rows:
+
+```
+netapp.com  fabricpool;1;Organic;    docs.netapp.com/us-en/ontap/concepts/fabricpool-concept.html
+netapp.com  fabricpool;1;AI overview;docs.netapp.com/us-en/ontap/concepts/fabricpool-concept.html
+netapp.com  fabricpool;1;AI overview;docs.netapp.com/us-en/flexpod/hybrid-cloud/cloud-fabricpool_fabricpool.html
+```
+
+NetApp holds two AI Overview rows for one keyword, both numbered 1. Dell holds
+three for "dell powerscale", all numbered 1. The number is a presence flag, not
+an ordering. Nothing can be "#1 in the AI answer" on this data, for anyone.
+
+## What was wrong, and what is actually true
+
+Previously claimed: for fabricpool, Komprise is cited first and NetApp's own
+documentation ranks from position 60 downward and is not cited at all.
+
+That is false. NetApp ranks organic #1 for fabricpool and is cited in the AI
+Overview. The 60-plus positions are NetApp's deep configuration pages. Reading
+those as the whole picture missed the #1 result sitting at the top of the same
+response.
+
+What is true: Komprise ranks organic #2 for fabricpool, directly behind
+NetApp's own concept page, and is also cited in the AI Overview. On
+"dell powerscale" the same shape holds, Dell #1 and Komprise #2. Ranking second
+to the vendor on the vendor's own product name is a genuinely strong result for
+a third party. It is not beating them.
+
+There is one clean win over a vendor in this set. For "data tiering" Komprise
+is organic #2 with an AI Overview citation, while netapp.com is organic #4 with
+no AI Overview row at all.
+
+## Consequence for the deck
+
+Slide 5 was rebuilt on Google organic position only, in
+`tools/slide5-organic/`. Organic positions are stable, reproducible by hand and
+consistent between vendors. The AI Overview presence data stays out of the
+board deck until a manual check confirms it. The worksheet for that check is in
+`tools/manual-verification/`.

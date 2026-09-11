@@ -1,0 +1,24 @@
+# HOW TO RUN THIS CHECK
+# 1. Open an incognito window. Do not sign in.
+# 2. Go to google.com and search the term. Stay on the "All" tab.
+# 3. DO NOT use the "AI Mode" tab. AI Mode is a separate conversational surface and is not what Semrush measures.
+# 4. Look for the block labelled "AI Overview" at the top of the results. Click "Show more" to expand it.
+# 5. Open the source list on the right of that block. Record every domain you see, in order.
+# 6. If no AI Overview block appears at all, write "none" in the AI Overview shown column.
+# 7. Run each term twice, a few minutes apart. Google often shows an AI Overview on one run and not the next.
+#
+term,lane,semrush_claim_ai_overview,semrush_crawl_date,semrush_organic_position,ai_overview_shown_run1,komprise_cited_run1,komprise_slot_run1,ai_overview_shown_run2,komprise_cited_run2,notes
+fabricpool,vendor,cited at slot 1,2026-08-12,2,,,,,,
+dell powerscale,vendor,cited at slot 1,2026-08-24,2,,,,,,
+dell emc storage,vendor,cited at slot 1,2026-08-01,7,,,,,,
+isilon powerscale,vendor,cited at slot 1,2026-07-20,no organic rank,,,,,,
+netapp bluexp,vendor,not cited,2026-08-31,12,,,,,,
+cloudpool,vendor,not cited,2026-07-27,13,,,,,,
+data tiering,storage,cited at slot 1,2026-08-29,2,,,,,,
+storage tiering,storage,cited at slot 1,2026-08-11,2,,,,,,
+intelligent tiering,storage,cited at slot 1,2026-07-20,5,,,,,,
+data storage costs,storage,cited at slot 1,2026-08-12,4,,,,,,
+azure netapp,storage,cited at slot 2,2026-08-10,5,,,,,,
+ai data ingestion,ai-ready,cited at slot 1,2026-07-25,1,,,,,,
+ai data leakage,ai-ready,cited at slot 1,2026-08-22,9,,,,,,
+unstructured data management,ai-ready,cited at slot 1,2026-08-11,3,,,,,,
